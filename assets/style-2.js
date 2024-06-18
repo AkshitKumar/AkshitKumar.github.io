@@ -4,17 +4,17 @@ const fontname = "Barlow";
 const fontweights = [300, 400]
 
 // Color properties
-const basecolor = "#777";
-const accentcolor = "#a00";
-const highlightcolor = "#111";
+const basecolor = "#303030";
+const accentcolor = "#4455DD";
+const highlightcolor = "#C82080";
 
 // const basecolor = "#888";
 // const accentcolor = "#222";
 // const highlight = "#111";
 
 // Body properties
-const bodyfontweight = 300;
-const bodyfontsize = "12pt";
+const bodyfontweight = 400;
+const bodyfontsize = "14pt";
 const backgroundcolor = "#fff";
 
 // Link properties
@@ -36,8 +36,8 @@ const menudecoration = "none";
 const headercolor = accentcolor;
 const headerfontsize = "18pt";
 const headerdecoration = "none";
-const namecolor = highlightcolor;
-const namefontsize = "23pt";
+const namecolor = accentcolor;
+const namefontsize = "25pt";
 
 
 // Publication properties
