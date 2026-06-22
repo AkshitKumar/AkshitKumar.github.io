@@ -51,6 +51,24 @@ a:hover {
     white-space: nowrap;
 }
 
+.ordos {
+    font-family: "EB Garamond", serif;
+    font-weight: 600;
+}
+
+.news-box {
+    background: #fffdf2;
+    border: 1px solid #e4e4d0;
+    border-left: 4px solid #034f46;
+    border-radius: 10px;
+    padding: 14px 18px;
+    color: #252b28;
+}
+
+.news-box a.ordos {
+    color: #034f46 !important;
+}
+
 .awards > summary::-webkit-details-marker,
 .presentations > summary::-webkit-details-marker {
     display: none;
