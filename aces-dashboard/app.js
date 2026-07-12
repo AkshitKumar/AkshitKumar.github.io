@@ -107,6 +107,7 @@ const modelReleaseInfo = {
 
 const providerOrder = ["OpenAI", "Anthropic", "Google"];
 const highReasoningModels = new Set(["gpt-5.5", "gpt-5.6-sol", "claude-opus-4-8", "claude-fable-5"]);
+const hiddenPromptVariants = new Set(["ip-pp-ui", "ip-pp-hl"]);
 
 function modelKeyFor(model, reasoning = "") {
   return `${model}__reasoning_${reasoning || "na"}`;
@@ -285,7 +286,7 @@ function promptOrderForModality(modality) {
 
 function sortPromptsForModality(prompts, modality) {
   const order = promptOrderForModality(modality);
-  return [...prompts].sort((a, b) => {
+  return [...prompts].filter((prompt) => !hiddenPromptVariants.has(prompt)).sort((a, b) => {
     const indexA = order.includes(a) ? order.indexOf(a) : order.length;
     const indexB = order.includes(b) ? order.indexOf(b) : order.length;
     return indexA - indexB || a.localeCompare(b);
@@ -715,10 +716,6 @@ function renderPositionHeatmap() {
     (d) => d.modality === state.modality && prompts.includes(d.prompt) && models.includes(d.modelKey),
   );
   els.heatmapSubtitle.textContent = `${labels[state.modality] || state.modality} · ${prompts.map((prompt) => promptLabel[prompt] || prompt).join(" vs ")} · deviation from the 12.5% no-position-bias baseline${highReasoningNote(models)}`;
-  if (!coefficientRows.length) {
-    els.positionHeatmap.innerHTML = `<div class="empty-state">No fitted position-choice probabilities for this model, mode, and prompt.</div>`;
-    return;
-  }
   els.positionHeatmap.innerHTML = `
     <div class="position-radar-grid">
       ${prompts.map((prompt) => positionPromptRadar(prompt, models, coefficientRows)).join("")}
@@ -743,23 +740,23 @@ function positionProviderRadar(prompt, provider, models, coefficientRows) {
     .map((model) => ({
       model,
       probabilities: positionProbabilitiesForModel(coefficientRows, model, prompt),
-    }))
-    .filter((series) => series.probabilities.some((value) => value != null && Number.isFinite(value)));
+    }));
   const providerClass = `provider-${providerKey(provider)}`;
+  const fittedCount = providerModels.filter((series) => seriesHasData(series)).length;
   return `
     <section class="radar-card ${providerClass}">
       <div class="radar-card-heading">
         <span class="panel-kicker">${escapeHtml(providerFamilyLabel(provider))}</span>
-        <strong>${providerModels.length ? `${providerModels.length} model${providerModels.length === 1 ? "" : "s"}` : "No selected model"}</strong>
+        <strong>${fittedCount ? `${fittedCount} fitted model${fittedCount === 1 ? "" : "s"}` : "No fitted data"}</strong>
       </div>
-      ${
-        providerModels.length
-          ? `${positionRadarSvg(providerModels, provider)}
-             <div class="radar-legend">
-               ${providerModels.map((series, index) => radarLegendItem(series.model, provider, index)).join("")}
-             </div>`
-          : `<div class="empty-state compact">Select a ${escapeHtml(providerFamilyLabel(provider))} model with ${escapeHtml(promptLabel[prompt] || prompt)} coefficients.</div>`
-      }
+      ${positionRadarSvg(providerModels, provider)}
+      <div class="radar-legend">
+        ${
+          providerModels.length
+            ? providerModels.map((series, index) => radarLegendItem(series, provider, index)).join("")
+            : `<span class="no-fit">No fitted ${escapeHtml(promptLabel[prompt] || prompt)} coefficients</span>`
+        }
+      </div>
     </section>`;
 }
 
@@ -839,13 +836,18 @@ function radarSeriesMarkup(series, provider, index, center, radius, maxAbs) {
     ${markerMarkup}`;
 }
 
-function radarLegendItem(model, provider, index) {
+function radarLegendItem(series, provider, index) {
   const dash = radarDash(index);
+  const hasData = seriesHasData(series);
   return `
-    <span>
+    <span class="${hasData ? "" : "no-fit"}">
       <i class="provider-${providerKey(provider)}" style="${dash ? `border-top-style:dashed;` : ""}"></i>
-      ${escapeHtml(displayModel(model))}
+      ${escapeHtml(displayModel(series.model))}${hasData ? "" : " (no fit)"}
     </span>`;
+}
+
+function seriesHasData(series) {
+  return series.probabilities.some((value) => value != null && Number.isFinite(value));
 }
 
 function radarDash(index) {
@@ -946,7 +948,7 @@ function headlessPositionEffect(termMap, index) {
 function uiPositionLabel(index) {
   const row = Math.floor(index / 4) + 1;
   const col = (index % 4) + 1;
-  return `Row ${row}, Column ${col}`;
+  return `R${row}C${col}`;
 }
 
 function probabilityHeatCellStyle(value, maxShare) {

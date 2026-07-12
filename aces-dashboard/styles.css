@@ -1038,6 +1038,15 @@ main {
   gap: 7px;
 }
 
+.radar-legend .no-fit {
+  color: var(--faint);
+  font-style: italic;
+}
+
+.radar-legend .no-fit i {
+  opacity: 0.35;
+}
+
 .radar-legend i {
   width: 26px;
   border-top: 3px solid currentColor;
