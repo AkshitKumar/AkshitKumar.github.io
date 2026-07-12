@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>What Is Your AI Agent Buying?</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-mark">A</div>
+          <div>
+            <h1>What Is Your AI Agent Buying?</h1>
+            <p>Evaluation, Biases, Model Dependence and Emerging Implications for Agentic E-Commerce</p>
+          </div>
+        </div>
+        <nav class="topbar-links" aria-label="Project links">
+          <a href="https://arxiv.org/abs/2508.02630">Paper</a>
+          <a href="https://github.com/mycustomai/ACES">Code</a>
+          <a href="https://huggingface.co/My-Custom-AI/collections">Dataset</a>
+        </nav>
+      </header>
+
+      <main>
+        <section class="layout-stack">
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Models covered</span>
+                <h2>Release Timeline</h2>
+                <p id="timelineSubtitle"></p>
+              </div>
+            </div>
+            <div id="modelTimeline" class="model-timeline"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Product market shares</span>
+                <h2>Product Shares</h2>
+                <p id="productShareSubtitle"></p>
+              </div>
+            </div>
+            <div class="panel-controls" aria-label="Product share controls">
+              <div class="control-group">
+                <span>Models</span>
+                <div id="marketModelSelector" class="option-group"></div>
+              </div>
+              <div class="control-row">
+                <div class="control-group">
+                  <span>Mode</span>
+                  <div id="marketModality" class="option-group compact"></div>
+                </div>
+                <div class="control-group">
+                  <span>Prompt</span>
+                  <div id="marketPrompt" class="option-group"></div>
+                </div>
+                <div class="control-group">
+                  <span>Product category</span>
+                  <div id="marketCategory" class="option-group"></div>
+                </div>
+              </div>
+            </div>
+            <div id="productShares" class="product-list"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Choice behavior</span>
+                <h2>Average Position Effects</h2>
+                <p id="heatmapSubtitle"></p>
+              </div>
+            </div>
+            <div class="panel-controls" aria-label="Choice behavior controls">
+              <div class="control-group">
+                <span>Models</span>
+                <div id="choiceModelSelector" class="option-group"></div>
+              </div>
+              <div class="control-row two-up">
+                <div class="control-group">
+                  <span>Mode</span>
+                  <div id="choiceModality" class="option-group compact"></div>
+                </div>
+                <div class="control-group">
+                  <span>Prompt variants</span>
+                  <div id="choicePrompt" class="option-group"></div>
+                </div>
+              </div>
+            </div>
+            <div id="positionHeatmap" class="heatmap"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">Utility model</span>
+                <h2>Choice Model Table</h2>
+                <p id="coefficientSubtitle"></p>
+              </div>
+            </div>
+            <div class="panel-controls" aria-label="Choice model controls">
+              <div class="control-group">
+                <span>Models</span>
+                <div id="coefficientModelSelector" class="option-group"></div>
+              </div>
+              <div class="control-row two-up">
+                <div class="control-group">
+                  <span>Mode</span>
+                  <div id="coefficientModality" class="option-group compact"></div>
+                </div>
+                <div class="control-group">
+                  <span>Prompt variants</span>
+                  <div id="coefficientPromptSelector" class="option-group"></div>
+                </div>
+              </div>
+            </div>
+            <div id="coefficientChart" class="coefficient-table-panel"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+    <script src="data/summary.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
