@@ -262,6 +262,23 @@ function modelKeyForPreferred(models, model) {
   );
 }
 
+function defaultChoiceModels(models) {
+  const preferred = [
+    ["gpt-5.6-sol", "gpt-5.5", "gpt-5.1"],
+    ["claude-fable-5", "claude-opus-4-8", "claude-opus-4-5-20251101"],
+    ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"],
+  ];
+  const chosen = preferred
+    .map((group) => group.map((model) => modelKeyForPreferred(models, model)).find(Boolean))
+    .filter(Boolean);
+  const selected = new Set(chosen);
+  ["gemini-2.5-flash"].forEach((model) => {
+    const key = modelKeyForPreferred(models, model);
+    if (key) selected.add(key);
+  });
+  return sortModelsByProviderRelease([...selected]);
+}
+
 function promptOrderForModality(modality) {
   return modality === "headless" ? ["def-hl", "ip-hl", "ip-pp-hl"] : ["def-ui", "ip-ui", "ip-pp-ui"];
 }
@@ -285,7 +302,10 @@ function ensureScopeState(scope) {
   const models = sortModelsByProviderRelease(uniq(available.map((d) => d.modelKey)));
   scope.selectedModels = scope.selectedModels.filter((model) => models.includes(model));
   if (!scope.selectedModels.length) {
-    scope.selectedModels = [defaultModelForScope(scope, models)].filter(Boolean);
+    scope.selectedModels =
+      scope.experiment === "choice_behavior"
+        ? defaultChoiceModels(models)
+        : [defaultModelForScope(scope, models)].filter(Boolean);
   }
   const relevantForModels = available.filter((d) => scope.selectedModels.includes(d.modelKey));
   const modalities = uniq(relevantForModels.map((d) => d.modality));
@@ -694,60 +714,179 @@ function renderPositionHeatmap() {
   const coefficientRows = DATA.coefficients.filter(
     (d) => d.modality === state.modality && prompts.includes(d.prompt) && models.includes(d.modelKey),
   );
-  els.heatmapSubtitle.textContent = `${labels[state.modality] || state.modality} · ${prompts.map((prompt) => promptLabel[prompt] || prompt).join(" vs ")} · fitted MNL position-choice probabilities${highReasoningNote(models)}`;
+  els.heatmapSubtitle.textContent = `${labels[state.modality] || state.modality} · ${prompts.map((prompt) => promptLabel[prompt] || prompt).join(" vs ")} · deviation from the 12.5% no-position-bias baseline${highReasoningNote(models)}`;
   if (!coefficientRows.length) {
     els.positionHeatmap.innerHTML = `<div class="empty-state">No fitted position-choice probabilities for this model, mode, and prompt.</div>`;
     return;
   }
-  const values = prompts
-    .flatMap((prompt) => models.flatMap((model) => positionProbabilitiesForModel(coefficientRows, model, prompt)))
-    .filter((value) => value != null && Number.isFinite(value));
-  const maxShare = Math.max(...values, 0.01);
   els.positionHeatmap.innerHTML = `
-    <div class="position-prompt-grid ${state.modality === "headless" ? "headless-prompts" : ""}">
-      ${prompts.map((prompt) => positionPromptHeatmap(prompt, models, coefficientRows, maxShare)).join("")}
+    <div class="position-radar-grid">
+      ${prompts.map((prompt) => positionPromptRadar(prompt, models, coefficientRows)).join("")}
     </div>`;
 }
 
-function positionPromptHeatmap(prompt, models, coefficientRows, maxShare) {
-  const cellsByModel = new Map(
-    models.map((model) => {
-      return [model, positionProbabilitiesForModel(coefficientRows, model, prompt)];
-    }),
-  );
-  const hasCells = [...cellsByModel.values()].some((cells) => cells.some((value) => value != null && Number.isFinite(value)));
+function positionPromptRadar(prompt, models, coefficientRows) {
   return `
-    <section class="position-prompt-panel">
+    <section class="position-prompt-panel radar-prompt-panel">
       <h3>${escapeHtml(promptLabel[prompt] || prompt)}</h3>
+      <div class="radar-family-grid">
+        ${providerOrder.map((provider) => positionProviderRadar(prompt, provider, models, coefficientRows)).join("")}
+      </div>
+    </section>`;
+}
+
+const BASE_POSITION_SHARE = 1 / 8;
+
+function positionProviderRadar(prompt, provider, models, coefficientRows) {
+  const providerModels = sortModelsByProviderRelease(models)
+    .filter((model) => providerFor(model) === provider)
+    .map((model) => ({
+      model,
+      probabilities: positionProbabilitiesForModel(coefficientRows, model, prompt),
+    }))
+    .filter((series) => series.probabilities.some((value) => value != null && Number.isFinite(value)));
+  const providerClass = `provider-${providerKey(provider)}`;
+  return `
+    <section class="radar-card ${providerClass}">
+      <div class="radar-card-heading">
+        <span class="panel-kicker">${escapeHtml(providerFamilyLabel(provider))}</span>
+        <strong>${providerModels.length ? `${providerModels.length} model${providerModels.length === 1 ? "" : "s"}` : "No selected model"}</strong>
+      </div>
       ${
-        hasCells
-          ? `<div class="heatmap-card-grid ${state.modality === "headless" ? "headless-stack" : ""}">
-              ${models
-                .map((model, index) => {
-                  const cells = (cellsByModel.get(model) || []).map((value, i) => {
-                    const label = state.modality === "headless" ? `Position ${i + 1}` : uiPositionLabel(i);
-                    return `<div class="paper-heat-cell" title="${label} · ${pct(value)}" style="${probabilityHeatCellStyle(value, maxShare)}">${pct(value)}</div>`;
-                  }).join("");
-                  const heatmapSurface =
-                    state.modality === "headless"
-                      ? `<div class="paper-product-grid headless-line">${cells}</div>`
-                      : `<div class="browser-frame" aria-hidden="true">
-                          <div class="browser-top">
-                            <i></i><i></i><i></i><span>Search for products...</span>
-                          </div>
-                          <div class="paper-product-grid">${cells}</div>
-                        </div>`;
-                  return `
-                    <figure class="paper-heatmap ${state.modality === "headless" ? "headless" : ""}">
-                      ${heatmapSurface}
-                      <figcaption>(${String.fromCharCode(97 + index)}) ${escapeHtml(displayModel(model))}</figcaption>
-                    </figure>`;
-                })
-                .join("")}
-            </div>`
-          : `<div class="empty-state">No fitted position-choice probabilities for ${escapeHtml(promptLabel[prompt] || prompt)}.</div>`
+        providerModels.length
+          ? `${positionRadarSvg(providerModels, provider)}
+             <div class="radar-legend">
+               ${providerModels.map((series, index) => radarLegendItem(series.model, provider, index)).join("")}
+             </div>`
+          : `<div class="empty-state compact">Select a ${escapeHtml(providerFamilyLabel(provider))} model with ${escapeHtml(promptLabel[prompt] || prompt)} coefficients.</div>`
       }
     </section>`;
+}
+
+function providerFamilyLabel(provider) {
+  return provider === "Google" ? "Gemini" : provider;
+}
+
+function positionRadarSvg(seriesRows, provider) {
+  const axisCount = 8;
+  const size = 560;
+  const center = size / 2;
+  const radius = 176;
+  const labelRadius = 229;
+  const deviations = seriesRows.flatMap((series) =>
+    series.probabilities
+      .filter((value) => value != null && Number.isFinite(value))
+      .map((value) => value - BASE_POSITION_SHARE),
+  );
+  const maxAbs = Math.max(BASE_POSITION_SHARE, ...deviations.map((value) => Math.abs(value)));
+  const rings = [-1, -0.5, 0, 0.5, 1];
+  const axes = Array.from({ length: axisCount }, (_, index) => radarAngle(index, axisCount));
+  const ringMarkup = rings
+    .map((multiplier) => {
+      const points = axes.map((angle) => radarPoint(center, radius, angle, radarRadiusForDeviation(multiplier * maxAbs, maxAbs))).join(" ");
+      const label = multiplier === 0 ? "12.5%" : signedPp(multiplier * maxAbs);
+      return `<polygon class="radar-ring ${multiplier === 0 ? "baseline" : ""}" points="${points}"><title>${label}</title></polygon>`;
+    })
+    .join("");
+  const axisMarkup = axes
+    .map((angle, index) => {
+      const end = radarPointTuple(center, radius, angle, 0.97);
+      const label = radarPointTuple(center, labelRadius, angle, 1);
+      return `
+        <line class="radar-axis" x1="${center}" y1="${center}" x2="${end[0]}" y2="${end[1]}"></line>
+        <text class="radar-axis-label" x="${label[0]}" y="${label[1]}" text-anchor="${radarTextAnchor(angle)}">${escapeHtml(positionAxisLabel(index))}</text>`;
+    })
+    .join("");
+  const seriesMarkup = seriesRows
+    .map((series, index) => radarSeriesMarkup(series, provider, index, center, radius, maxAbs))
+    .join("");
+  return `
+    <svg class="radar-svg" viewBox="0 0 ${size} ${size}" role="img" aria-label="${escapeHtml(providerFamilyLabel(provider))} position-bias radar chart">
+      <g>${ringMarkup}</g>
+      <g>${axisMarkup}</g>
+      <g>${seriesMarkup}</g>
+      <text class="radar-baseline-label" x="${center}" y="${center - radius * 0.5 - 8}" text-anchor="middle">12.5% baseline</text>
+    </svg>`;
+}
+
+function radarSeriesMarkup(series, provider, index, center, radius, maxAbs) {
+  const points = series.probabilities
+    .map((value, axisIndex) => {
+      if (value == null || !Number.isFinite(value)) return null;
+      return {
+        value,
+        axisIndex,
+        point: radarPointTuple(center, radius, radarAngle(axisIndex, 8), radarRadiusForDeviation(value - BASE_POSITION_SHARE, maxAbs)),
+      };
+    })
+    .filter(Boolean);
+  if (!points.length) return "";
+  const pointString = points.map((item) => item.point.join(",")).join(" ");
+  const dash = radarDash(index);
+  const markerMarkup = points
+    .map(
+      (item) =>
+        `<circle class="radar-dot provider-${providerKey(provider)}" cx="${item.point[0]}" cy="${item.point[1]}" r="4.5">
+          <title>${escapeHtml(displayModel(series.model))} · ${escapeHtml(positionAxisLabel(item.axisIndex))}: ${pct(item.value)} (${signedPp(item.value - BASE_POSITION_SHARE)})</title>
+        </circle>`,
+    )
+    .join("");
+  return `
+    <polygon class="radar-area provider-${providerKey(provider)} series-${index % 4}" points="${pointString}"></polygon>
+    <polyline class="radar-line provider-${providerKey(provider)} series-${index % 4}" points="${pointString} ${points[0].point.join(",")}" ${dash ? `stroke-dasharray="${dash}"` : ""}>
+      <title>${escapeHtml(displayModel(series.model))}</title>
+    </polyline>
+    ${markerMarkup}`;
+}
+
+function radarLegendItem(model, provider, index) {
+  const dash = radarDash(index);
+  return `
+    <span>
+      <i class="provider-${providerKey(provider)}" style="${dash ? `border-top-style:dashed;` : ""}"></i>
+      ${escapeHtml(displayModel(model))}
+    </span>`;
+}
+
+function radarDash(index) {
+  return ["", "9 6", "3 6", "12 4 3 4"][index % 4];
+}
+
+function radarAngle(index, total) {
+  return -Math.PI / 2 + (index * 2 * Math.PI) / total;
+}
+
+function radarRadiusForDeviation(deviation, maxAbs) {
+  return Math.max(0.06, Math.min(0.96, 0.5 + (deviation / maxAbs) * 0.44));
+}
+
+function radarPoint(center, radius, angle, scale) {
+  const [x, y] = radarPointTuple(center, radius, angle, scale);
+  return `${x},${y}`;
+}
+
+function radarPointTuple(center, radius, angle, scale) {
+  return [
+    Number((center + Math.cos(angle) * radius * scale).toFixed(2)),
+    Number((center + Math.sin(angle) * radius * scale).toFixed(2)),
+  ];
+}
+
+function radarTextAnchor(angle) {
+  const x = Math.cos(angle);
+  if (x > 0.32) return "start";
+  if (x < -0.32) return "end";
+  return "middle";
+}
+
+function positionAxisLabel(index) {
+  return state.modality === "headless" ? `Position ${index + 1}` : uiPositionLabel(index);
+}
+
+function signedPp(value) {
+  if (value == null || Number.isNaN(value)) return "n/a";
+  const pp = value * 100;
+  return `${pp >= 0 ? "+" : ""}${pp.toFixed(1)} pp`;
 }
 
 function positionProbabilitiesForModel(coefficientRows, model, prompt) {
