@@ -176,13 +176,49 @@ h1, h2, h3, p { margin: 0; }
 }
 .statement-slide .subtitle { margin-top: 20px; font-size: 21px; max-width: 700px; }
 
-/* ---------- headlines collage ---------- */
-.headline-grid { position: relative; height: 560px; }
-.headline-card {
-  position: absolute; background: #fff; border: 2px solid var(--line-strong);
-  border-radius: 10px; box-shadow: 0 2px 0 var(--line-strong); overflow: hidden;
+/* ---------- shopping evidence ---------- */
+.shopping-evidence-slide { padding: 28px 42px 26px; }
+.shopping-evidence-slide .slide-title { margin-bottom: 10px; font-size: 40px; }
+.shopping-evidence { display: grid; gap: 8px; }
+.shopping-band-label {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Figtree', Arial, sans-serif; font-size: 13px; line-height: 1;
+  font-weight: 800; text-transform: uppercase; color: var(--accent);
 }
-.headline-card img { width: 100%; height: 100%; object-fit: cover; }
+.shopping-band-label span {
+  display: inline-grid; place-items: center; width: 28px; height: 24px;
+  border: 2px solid var(--line-strong); border-radius: 5px;
+  color: var(--ink); background: #fff;
+}
+.frontier-agent-grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px;
+}
+.commerce-shot {
+  margin: 0; min-width: 0; overflow: hidden; background: #fff;
+  border: 2px solid var(--line-strong); border-radius: 6px;
+}
+.commerce-shot img { display: block; width: 100%; height: 100%; object-fit: contain; background: #fff; }
+.frontier-agent-grid .commerce-shot { height: 112px; }
+.frontier-agent-grid .openai-shot { border-top: 5px solid var(--openai); }
+.frontier-agent-grid .anthropic-shot { border-top: 5px solid var(--anthropic); }
+.frontier-agent-grid .google-shot { border-top: 5px solid var(--google); }
+.commerce-deployment { display: grid; gap: 8px; margin-top: 4px; }
+.commerce-deployment-grid {
+  display: grid; grid-template-columns: 1.06fr .94fr; gap: 16px; height: 320px;
+}
+.walmart-shot { padding: 6px; }
+.checkout-shot {
+  display: grid; grid-template-rows: .34fr .66fr; align-items: stretch;
+}
+.checkout-media { position: relative; min-height: 0; overflow: hidden; }
+.checkout-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.checkout-partners { border-bottom: 1px solid var(--line); }
+.checkout-headline { padding: 6px 10px; }
+.shopping-takeaway {
+  padding: 11px 14px; border: 2px solid var(--line-strong); border-radius: 6px;
+  background: var(--accent-soft); text-align: center; font-size: 20px; line-height: 1.25;
+}
+.shopping-takeaway strong { color: var(--accent); }
 
 /* ---------- video slide ---------- */
 .video-slide { background: #101010; }
