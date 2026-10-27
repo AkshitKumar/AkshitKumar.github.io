@@ -3,7 +3,20 @@
     background: #fbeef2;
     border-left: 3px solid #a33b58;
     padding: 16px;
+    margin: 0 -16px !important;
     border-top-color: #eed6de;
+}
+
+.organizing-session a {
+    color: #a33b58 !important;
+    text-decoration: underline !important;
+    text-underline-offset: 3px;
+}
+
+@media (max-width: 575px) {
+    .talks-list > .organizing-session {
+        margin-inline: -8px !important;
+    }
 }
 
 .instilogo {
