@@ -69,6 +69,58 @@ a:hover {
     color: #034f46 !important;
 }
 
+.talks-box {
+    margin: 8px 0 24px;
+    padding: 24px;
+    border: 1px solid #ceded9;
+    border-top: 4px solid #287467;
+    border-radius: 8px;
+    background: #f5faf8;
+    box-shadow: 0 6px 20px rgba(24, 65, 55, 0.08);
+    color: #303c38;
+    overflow-wrap: anywhere;
+}
+
+.talks-intro {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.talks-intro > strong {
+    color: #205f54;
+    font-size: 1.15em;
+}
+
+.talks-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.talks-list > li {
+    margin: 0 !important;
+    padding: 16px 0;
+    border-top: 1px solid #dce8e3;
+    line-height: 1.65;
+}
+
+.talks-list > li:last-child {
+    padding-bottom: 0;
+}
+
+.talks-list a {
+    color: #205f54;
+}
+
+.talks-list a:hover {
+    color: #133f37;
+    text-decoration: underline;
+}
+
+@media (max-width: 575px) {
+    .talks-box { padding: 18px 16px; }
+}
+
 .awards > summary::-webkit-details-marker,
 .presentations > summary::-webkit-details-marker {
     display: none;
