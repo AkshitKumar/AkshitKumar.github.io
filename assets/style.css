@@ -1,5 +1,9 @@
 .talks-list > .organizing-session {
     color: #a33b58;
+    background: #fbeef2;
+    border-left: 3px solid #a33b58;
+    padding: 16px;
+    border-top-color: #eed6de;
 }
 
 .instilogo {
