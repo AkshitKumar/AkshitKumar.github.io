@@ -264,6 +264,7 @@ main {
 
 .panel-controls {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   margin-bottom: 18px;
   border: 1px solid var(--line);
@@ -1081,7 +1082,7 @@ main {
 
 .coefficient-prompt-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(520px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr));
   gap: 22px;
   align-items: start;
 }
@@ -1486,11 +1487,12 @@ main {
 
   .brand,
   .control-row,
+  .control-row.two-up,
   .model-provider-row,
   .product-row,
   .feature-row,
   .coef-row {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .model-provider-label {
