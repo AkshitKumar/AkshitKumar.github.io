@@ -657,6 +657,8 @@ table.coef tfoot th, table.coef tfoot td { font-size: 13px; }
 .coef-controls .model-provider-line .chip-row { gap: 3px; }
 .coef-controls .model-provider-line .chip { font-size: 9.5px; padding-left: 5px; padding-right: 5px; }
 .coef-controls .model-provider-line .chip.active { padding-left: 4px; padding-right: 4px; }
+.market-findings-slide .model-provider-line .chip { font-size: 9.5px; padding-left: 5px; padding-right: 5px; }
+.market-findings-slide .model-provider-line .chip.active { padding-left: 4px; padding-right: 4px; }
 .ms-prod { display: grid; grid-template-columns: 40px 226px 1fr; gap: 9px; align-items: center;
   border-top: 1px solid var(--line); padding: 2px 0; }
 .ms-prod:first-child { border-top: 0; }
@@ -671,7 +673,7 @@ table.coef tfoot th, table.coef tfoot td { font-size: 13px; }
 .ms-pname { font-weight: 700; font-size: 12.5px; line-height: 1.15; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
 .ms-pmeta { color: var(--muted); font-size: 10px; margin-top: 0; }
 .ms-blines { display: grid; gap: 2px; }
-.ms-bline { display: grid; grid-template-columns: 99px minmax(0, 1fr) 40px; gap: 6px; align-items: center; font-size: 9.5px; }
+.ms-bline { display: grid; grid-template-columns: 99px minmax(0, 1fr) 40px; gap: 6px; align-items: center; font-size: 9.5px; line-height: 1.25; }
 .ms-bline .mlabel { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
 .ms-bline .mval { text-align: right; color: var(--muted); font-variant-numeric: tabular-nums; }
 .ms-grid { display: grid; gap: 5px; }

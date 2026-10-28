@@ -476,7 +476,7 @@
     }
 
     function axisLabel(index) {
-      if (state.modality === 'headless') return 'Position ' + (index + 1);
+      if (state.modality === 'headless') return 'P' + (index + 1);
       return 'R' + (Math.floor(index / 4) + 1) + 'C' + ((index % 4) + 1);
     }
 
@@ -539,7 +539,7 @@
         '<div class="pos-radar-heading"><span>' + (provider === 'Google' ? 'GEMINI' : provider.toUpperCase()) + '</span><strong>' + esc(nameOf(model)) + '</strong></div>' +
         '<svg class="pos-radar-svg" viewBox="0 0 360 360" role="img" aria-label="' + esc(nameOf(model)) + (available ? ' position effect' : ': no fitted data') + '">' +
           '<g>' + rings + axisMarkup + series + '</g>' +
-          '<text class="pos-radar-baseline-label" x="180" y="116" text-anchor="middle">12.5% BASELINE</text>' +
+          '<text class="pos-radar-baseline-label" x="180" y="352" text-anchor="middle">12.5% BASELINE</text>' +
           (!available ? '<text class="pos-radar-baseline-label" x="180" y="190" text-anchor="middle">n/a</text>' : '') + '</svg>' +
         '</section>';
     }
