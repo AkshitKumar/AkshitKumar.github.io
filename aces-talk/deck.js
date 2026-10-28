@@ -5,6 +5,7 @@
 
   /* ---------------- model metadata ---------------- */
   var MODEL_NAMES = {
+    'claude-fable-5-1': 'Claude Fable 5.1',
     'claude-fable-5': 'Claude Fable 5',
     'claude-opus-4-1-20250805': 'Claude Opus 4.1',
     'claude-opus-4-20250514': 'Claude Opus 4',
@@ -23,9 +24,11 @@
     'gpt-5.1': 'GPT-5.1',
     'gpt-5.2': 'GPT-5.2',
     'gpt-5.5': 'GPT-5.5',
-    'gpt-5.6-sol': 'GPT-5.6 Sol'
+    'gpt-5.6-sol': 'GPT-5.6 Sol',
+    'gpt-6-astra': 'GPT-6 Astra'
   };
   var RELEASE = {
+    'gpt-6-astra': '2026-09-03', 'claude-fable-5-1': '2026-09-01',
     'gpt-4o-2024-11-20': '2024-05-13', 'gpt-4.1-2025-04-14': '2025-04-14',
     'gpt-5': '2025-08-07', 'gpt-5.1': '2025-11-12', 'gpt-5.2': '2025-12-11',
     'gpt-5.5': '2026-04-23', 'gpt-5.6-sol': '2026-07-09',
@@ -38,7 +41,7 @@
     'gemini-3-pro-preview': '2025-11-18'
   };
   var PROVIDERS = ['OpenAI', 'Anthropic', 'Google'];
-  var FLAGSHIPS = ['gpt-5.6-sol', 'claude-fable-5', 'gemini-3-pro-preview'];
+  var FLAGSHIPS = ['gpt-6-astra', 'claude-fable-5-1', 'gemini-3-pro-preview'];
   var PROVIDER_COLOR = { OpenAI: '#1a1a1a', Anthropic: '#ff7f0e', Google: '#1a73e8' };
 
   function baseModel(m) { return String(m || '').replace(/__reasoning_.+$/, ''); }
@@ -107,6 +110,7 @@
       var prov = providerOf(m).toLowerCase();
       b.className = 'chip provider-' + prov + (selected.indexOf(m) >= 0 ? ' active' : '');
       b.textContent = nameOf(m);
+      b.setAttribute('aria-pressed', String(selected.indexOf(m) >= 0));
       b.title = reasoningOf(m) === 'high' ? nameOf(m) + ' uses high reasoning' : nameOf(m);
       b.addEventListener('click', function () { onToggle(m); });
       wrap.appendChild(b);
@@ -120,6 +124,7 @@
       var b = document.createElement('button');
       b.className = 'chip' + (o === current ? ' active' : '');
       b.textContent = labels[i] || o;
+      b.setAttribute('aria-pressed', String(o === current));
       b.addEventListener('click', function () { onPick(o); });
       wrap.appendChild(b);
     });
@@ -164,12 +169,12 @@
     var models = uniq((DATA.coverage || []).map(function (c) { return c.model; }))
       .filter(function (m) { return RELEASE[m]; })
       .sort(function (a, b) { return RELEASE[a] < RELEASE[b] ? -1 : 1; });
-    var t0 = new Date('2024-04-01').getTime(), t1 = new Date('2026-08-20').getTime();
+    var t0 = new Date('2024-04-01').getTime(), t1 = new Date('2026-11-01').getTime();
     function pct(d) { return ((new Date(d).getTime() - t0) / (t1 - t0) * 100).toFixed(2); }
     var MARK = { OpenAI: 'sq', Anthropic: 'ci', Google: 'tr' };
     var html = '<div class="tlm"><div class="tlm-axis">';
-    ['2024-07-01', '2025-01-01', '2025-07-01', '2026-01-01', '2026-07-01'].forEach(function (d) {
-      var lbl = (d.slice(5, 7) === '07' ? 'Jul ' : 'Jan ') + d.slice(0, 4);
+    ['2024-07-01', '2025-01-01', '2025-07-01', '2026-01-01', '2026-07-01', '2026-10-01'].forEach(function (d) {
+      var lbl = MONTHS[parseInt(d.slice(5, 7), 10) - 1].slice(0, 3) + ' ' + d.slice(0, 4);
       html += '<span style="left:' + pct(d) + '%">' + lbl + '</span>';
     });
     html += '</div>';
@@ -177,9 +182,9 @@
       var prov = providerOf(m);
       var flag = FLAGSHIPS.indexOf(m) >= 0;
       html += '<div class="tlm-row"><div class="tlm-label">' +
-        '<strong style="color:' + PROVIDER_COLOR[prov] + '">' + esc(nameOf(m)) + (flag ? ' ✱' : '') + '</strong>' +
+        '<strong style="color:' + PROVIDER_COLOR[prov] + '">' + esc(nameOf(m)) + '</strong>' +
         '<span>' + prov + ' · ' + fmtDate(RELEASE[m]) + '</span></div>' +
-        '<div class="tlm-track"><span class="tlm-mark ' + MARK[prov] + (flag ? ' flag' : '') + '" style="left:' + pct(RELEASE[m]) + '%"></span></div></div>';
+        '<div class="tlm-track"><span class="tlm-mark ' + MARK[prov] + (flag ? ' flag' : '') + '" title="' + esc(nameOf(m)) + ': ' + fmtDate(RELEASE[m]) + '" style="left:' + pct(RELEASE[m]) + '%"></span></div></div>';
     });
     html += '</div>';
     el.innerHTML = html;
@@ -193,13 +198,10 @@
   };
   function initMarketShare(el) {
     var products = (DATA.products || []).filter(function (p) { return p.experiment === 'market_share'; });
-    if (!products.length) products = (DATA.products || []).filter(function (p) { return p.experiment === 'choice_behavior'; });
-    var modality = products.some(function (p) { return p.modality === 'ui'; }) ? 'ui' : 'headless';
-    var pool = products.filter(function (p) { return p.modality === modality && /^def/.test(p.prompt); });
-    if (!pool.length) pool = products;
-    var allModels = preferredModelKeys(pool);
+    var allModels = preferredModelKeys(products.filter(function (p) { return /^def-/.test(p.prompt); }));
     var state = {
       models: flagshipKeys(allModels),
+      modality: 'ui',
       category: 'fitness_watch'
     };
     if (!state.models.length) state.models = allModels.slice(-3);
@@ -209,7 +211,9 @@
     el.appendChild(controls); el.appendChild(chart);
 
     function render() {
+      var pool = products.filter(function (p) { return p.modality === state.modality && p.prompt === (state.modality === 'ui' ? 'def-ui' : 'def-hl'); });
       controls.innerHTML = '';
+      controls.appendChild(controlLine('Interface', optionRow(['ui', 'headless'], ['UI (screenshot)', 'Headless (JSON)'], state.modality, function (value) { state.modality = value; render(); })));
       var cats = ((DATA.categories || {}).market_share || uniq(pool.map(function (p) { return p.category; }))).slice();
       var catLine = controlLine('Category', optionRow(cats, cats.map(function (c) { return CAT_LABELS[c] || c; }), state.category, function (c) { state.category = c; render(); }));
       catLine.classList.add('category-control');
@@ -247,15 +251,16 @@
           (r.reviews != null ? ' &nbsp;·&nbsp; ' + Number(r.reviews).toLocaleString() + ' reviews' : '') + '</div></div>' +
           '<div class="ms-blines">';
         state.models.forEach(function (m) {
-          var v = r.shares[m] || 0;
+          var available = Number.isFinite(r.shares[m]);
+          var v = available ? r.shares[m] : 0;
           var col = PROVIDER_COLOR[providerOf(m)];
           html += '<div class="ms-bline"><span class="mlabel" style="color:' + col + '">' + esc(nameOf(m)) + '</span>' +
             '<div class="ms-track"><div class="ms-fill" style="width:' + Math.max(0, Math.min(v * 100, 100)).toFixed(1) + '%;background:' + col + '"></div></div>' +
-            '<span class="mval">' + (v * 100).toFixed(1) + '%</span></div>';
+            '<span class="mval">' + (available ? (v * 100).toFixed(1) + '%' : 'n/a') + '</span></div>';
         });
         html += '</div></div>';
       });
-      html += '</div>';
+      html += '</div><div class="table-note">* High reasoning. Default prompt; n/a = no data for this interface. New models: 100 trials per category.</div>';
       chart.innerHTML = html;
     }
     render();
@@ -294,8 +299,8 @@
   var COEF_STEP_INFO = [
     null,
     { group: 'pos', text: '<strong>Heterogeneous position effect across models.</strong> Traditional monetization levers like product ranking do not apply uniformly.' },
-    { group: 'tag', text: 'Having a <strong>sponsored tag reduces</strong> selection probability, while platform promotion (<strong>Overall Pick</strong>) significantly increases it.' },
-    { group: 'attr', text: 'Models make <strong>economically sensible</strong> decisions: prefer cheaper, higher-rated and more-reviewed products — with heterogeneous sensitivity across models.' }
+    { group: 'tag', text: '<strong>Promotion effects depend on the model and prompt.</strong> Overall Pick, Sponsored, and Scarcity tags need not have the same effect or statistical significance.' },
+    { group: 'attr', text: '<strong>Price, ratings, and review counts carry different weights.</strong> Estimated sensitivities vary across models, prompts, and interfaces.' }
   ];
 
   function initCoefTable(el) {
@@ -375,8 +380,22 @@
         });
         html += '</tr>';
       });
-      html += '</tbody></table></div>' +
-        '<div class="table-note">Conditional logit estimates, pooled across the 8 product categories. Significance: <em>*p&nbsp;&lt;&nbsp;0.05, **p&nbsp;&lt;&nbsp;0.01, ***p&nbsp;&lt;&nbsp;0.001</em>. Standard errors in parentheses.</div>';
+      html += '</tbody><tfoot>';
+      [['nChoiceSetsFit', 'Choice sets fitted'], ['nCategoriesFit', 'Categories fitted']].forEach(function (stat) {
+        html += '<tr><th>' + stat[1] + '</th>';
+        state.models.forEach(function (m) {
+          var fit = lookup(m, 'log_price');
+          html += '<td>' + (fit && Number.isFinite(fit[stat[0]]) ? Number(fit[stat[0]]).toLocaleString() : 'n/a') + '</td>';
+        });
+        html += '</tr>';
+      });
+      html += '</tfoot></table></div>' +
+        '<div class="table-note">Conditional logit with product fixed effects. Standard errors in parentheses. Coefficient stars: <em>*p&nbsp;&lt;&nbsp;0.05, **p&nbsp;&lt;&nbsp;0.01, ***p&nbsp;&lt;&nbsp;0.001</em>. Model-name * = high reasoning.</div>';
+      if (state.modality === 'ui' && state.models.some(function (m) { return baseModel(m) === 'gpt-6-astra'; })) {
+        if (lookup(preferredKey(state.models, 'gpt-6-astra'), 'log_price')) {
+          html += '<div class="table-note">GPT-6 Astra: 700 of 800 sets inform the UI fit; office-lamp choices are invariant after product filtering.</div>';
+        }
+      }
       tableWrap.innerHTML = html;
 
       var bhtml = '';
@@ -410,7 +429,6 @@
     var charts = document.createElement('div');
     var takeaway = document.createElement('div');
     takeaway.className = 'finding-callout radar-takeaway';
-    takeaway.innerHTML = '<strong>Position is not a uniform treatment.</strong> The same 2 x 4 page produces sharply different choice patterns across models.';
     el.appendChild(controls); el.appendChild(charts); el.appendChild(takeaway);
 
     function coefficientMap(model) {
@@ -481,15 +499,13 @@
       return Math.max(0.06, Math.min(0.96, 0.5 + (deviation / maxAbs) * 0.44));
     }
 
-    function radarCard(model) {
+    function radarCard(model, maxAbs) {
       var provider = providerOf(model);
       var providerKey = provider.toLowerCase();
       var values = probabilities(model);
       var available = values.some(function (v) { return v != null && Number.isFinite(v); });
       var size = 360, center = 180, radius = 112, labelRadius = 151;
       var baseline = 1 / 8;
-      var deviations = values.filter(function (v) { return v != null; }).map(function (v) { return v - baseline; });
-      var maxAbs = Math.max.apply(null, [baseline].concat(deviations.map(function (v) { return Math.abs(v); })));
       var axes = [];
       for (var i = 0; i < 8; i++) axes.push(angle(i));
 
@@ -521,10 +537,10 @@
 
       return '<section class="pos-radar-card provider-' + providerKey + '">' +
         '<div class="pos-radar-heading"><span>' + (provider === 'Google' ? 'GEMINI' : provider.toUpperCase()) + '</span><strong>' + esc(nameOf(model)) + '</strong></div>' +
-        (available ? '<svg class="pos-radar-svg" viewBox="0 0 360 360" role="img" aria-label="' + esc(nameOf(model)) + ' position effect">' +
+        '<svg class="pos-radar-svg" viewBox="0 0 360 360" role="img" aria-label="' + esc(nameOf(model)) + (available ? ' position effect' : ': no fitted data') + '">' +
           '<g>' + rings + axisMarkup + series + '</g>' +
-          '<text class="pos-radar-baseline-label" x="180" y="116" text-anchor="middle">12.5% BASELINE</text></svg>' :
-          '<div class="pos-radar-empty">No fitted position coefficients</div>') +
+          '<text class="pos-radar-baseline-label" x="180" y="116" text-anchor="middle">12.5% BASELINE</text>' +
+          (!available ? '<text class="pos-radar-baseline-label" x="180" y="190" text-anchor="middle">n/a</text>' : '') + '</svg>' +
         '</section>';
     }
 
@@ -558,7 +574,15 @@
       var selected = PROVIDERS.map(function (provider) {
         return state.models.find(function (model) { return providerOf(model) === provider; });
       }).filter(Boolean);
-      charts.innerHTML = '<div class="position-radar-grid">' + selected.map(radarCard).join('') + '</div>';
+      var deviations = [];
+      selected.forEach(function (m) {
+        probabilities(m).forEach(function (v) { if (v != null) deviations.push(Math.abs(v - 0.125)); });
+      });
+      var maxAbs = Math.max.apply(null, [0.125].concat(deviations));
+      charts.innerHTML = '<div class="position-radar-grid">' + selected.map(function (m) { return radarCard(m, maxAbs); }).join('') + '</div>' +
+        '<div class="table-note">Pooled MNL position probabilities for identical products; shared radial scale. Dashed ring = 12.5%. * High reasoning; n/a = no fitted data.</div>';
+      takeaway.innerHTML = '<strong>Position is not a uniform treatment.</strong> ' +
+        (state.modality === 'ui' ? 'The same 2 x 4 page' : 'The same ordered JSON list') + ' produces different choice patterns across models.';
     }
 
     render();
