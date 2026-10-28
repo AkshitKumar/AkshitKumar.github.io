@@ -62,6 +62,7 @@ const els = {
 };
 
 const modelNames = {
+  "claude-fable-5-1": "Claude Fable 5.1",
   "claude-fable-5": "Claude Fable 5",
   "claude-opus-4-1-20250805": "Claude Opus 4.1",
   "claude-opus-4-20250514": "Claude Opus 4",
@@ -81,9 +82,12 @@ const modelNames = {
   "gpt-5.2": "GPT-5.2",
   "gpt-5.5": "GPT-5.5",
   "gpt-5.6-sol": "GPT-5.6 Sol",
+  "gpt-6-astra": "GPT-6 Astra",
 };
 
 const modelReleaseInfo = {
+  "gpt-6-astra": { date: "2026-09-03", provider: "OpenAI", source: "https://developers.openai.com/api/docs/changelog" },
+  "claude-fable-5-1": { date: "2026-09-01", provider: "Anthropic", source: "https://platform.claude.com/docs/en/models/fable-5-1/overview" },
   "gpt-4o-2024-11-20": { date: "2024-05-13", provider: "OpenAI", source: "OpenAI" },
   "gpt-4.1-2025-04-14": { date: "2025-04-14", provider: "OpenAI", source: "OpenAI" },
   "gpt-5": { date: "2025-08-07", provider: "OpenAI", source: "AP / OpenAI launch coverage" },
@@ -106,7 +110,6 @@ const modelReleaseInfo = {
 };
 
 const providerOrder = ["OpenAI", "Anthropic", "Google"];
-const highReasoningModels = new Set(["gpt-5.5", "gpt-5.6-sol", "claude-opus-4-8", "claude-fable-5"]);
 const hiddenPromptVariants = new Set(["ip-pp-ui", "ip-pp-hl"]);
 
 function modelKeyFor(model, reasoning = "") {
@@ -148,7 +151,7 @@ function isHighReasoning(modelOrKey) {
 function displayModel(modelOrKey) {
   const model = baseModel(modelOrKey);
   const name = modelNames[model] || String(model || "").replaceAll("-", " ");
-  return isHighReasoning(modelOrKey) && highReasoningModels.has(model) ? `${name}*` : name;
+  return isHighReasoning(modelOrKey) ? `${name}*` : name;
 }
 
 function highReasoningNote(models) {
@@ -186,7 +189,11 @@ function timelineStartTime() {
 }
 
 function timelineEndTime() {
-  return new Date("2026-07-31T00:00:00Z").getTime();
+  const latest = new Date(Math.max(...DATA.coverage.map((row) => {
+    const date = modelReleaseInfo[row.model]?.date;
+    return date ? new Date(`${date}T00:00:00Z`).getTime() : timelineStartTime();
+  })));
+  return Date.UTC(latest.getUTCFullYear(), latest.getUTCMonth() + 2, 0);
 }
 
 function releaseDateText(dateText) {
@@ -249,9 +256,9 @@ function modelCoverage(experiment = state.experiment) {
 
 function defaultModelForScope(scope, models) {
   if (scope.experiment === "market_share") {
-    return modelKeyForPreferred(models, "gpt-5.6-sol") || models[0] || "";
+    return modelKeyForPreferred(models, "gpt-6-astra") || modelKeyForPreferred(models, "gpt-5.6-sol") || models[0] || "";
   }
-  const preferred = ["gpt-5.6-sol", "gpt-5.5", "claude-opus-4-8", "claude-fable-5"];
+  const preferred = ["gpt-6-astra", "claude-fable-5-1", "gpt-5.6-sol", "gpt-5.5", "claude-opus-4-8", "claude-fable-5"];
   return preferred.map((model) => modelKeyForPreferred(models, model)).find(Boolean) || models[0] || "";
 }
 
@@ -265,8 +272,8 @@ function modelKeyForPreferred(models, model) {
 
 function defaultChoiceModels(models) {
   const preferred = [
-    ["gpt-5.6-sol", "gpt-5.5", "gpt-5.1"],
-    ["claude-fable-5", "claude-opus-4-8", "claude-opus-4-5-20251101"],
+    ["gpt-6-astra", "gpt-5.6-sol", "gpt-5.5", "gpt-5.1"],
+    ["claude-fable-5-1", "claude-fable-5", "claude-opus-4-8", "claude-opus-4-5-20251101"],
     ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"],
   ];
   const chosen = preferred
@@ -371,6 +378,7 @@ function renderButtonGroup(container, values, selected, onSelect, formatter = (v
     button.type = "button";
     const isActive = Array.isArray(selected) ? selected.includes(value) : value === selected;
     button.className = `choice-chip${isActive ? " active" : ""}`;
+    button.setAttribute("aria-pressed", String(isActive));
     if (options.providerClass) button.classList.add(options.providerClass(value));
     button.textContent = formatter(value);
     button.title = value || formatter(value);
@@ -403,6 +411,7 @@ function renderModelButtonGroup(container, models, selected, onSelect) {
       button.type = "button";
       const isActive = selected.includes(model);
       button.className = `choice-chip provider-${providerKey(provider)}${isActive ? " active" : ""}`;
+      button.setAttribute("aria-pressed", String(isActive));
       button.textContent = displayModel(model);
       button.title = model;
       button.addEventListener("click", () => onSelect(model));
@@ -582,19 +591,13 @@ function renderModelTimeline() {
       return { model, provider, date, dateLabel };
     })
     .sort((a, b) => new Date(a.date) - new Date(b.date) || displayModel(a.model).localeCompare(displayModel(b.model)));
-  els.timelineSubtitle.textContent = `${modelRows.length} models, January 2025 to July 2026; sorted from oldest to newest`;
-  const ticks = [
-    ["2025-01-01", "Jan 2025"],
-    ["2025-03-01", "Mar 2025"],
-    ["2025-05-01", "May 2025"],
-    ["2025-07-01", "Jul 2025"],
-    ["2025-09-01", "Sep 2025"],
-    ["2025-11-01", "Nov 2025"],
-    ["2026-01-01", "Jan 2026"],
-    ["2026-03-01", "Mar 2026"],
-    ["2026-05-01", "May 2026"],
-    ["2026-07-01", "Jul 2026"],
-  ];
+  const endLabel = new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric", timeZone: "UTC" }).format(new Date(timelineEndTime()));
+  els.timelineSubtitle.textContent = `${modelRows.length} models, January 2025 to ${endLabel}; sorted from oldest to newest`;
+  const ticks = [];
+  for (const date = new Date(timelineStartTime()); date.getTime() <= timelineEndTime(); date.setUTCMonth(date.getUTCMonth() + 2)) {
+    const iso = date.toISOString().slice(0, 10);
+    ticks.push([iso, formatMonth(iso)]);
+  }
   els.modelTimeline.innerHTML = `
     <div class="timeline-axis">
       ${ticks.map(([date, label]) => `<span style="left:${datePercent(date)}%">${label}</span>`).join("")}
@@ -699,12 +702,12 @@ function renderProductShares() {
 }
 
 function shareLine(model, row) {
-  const value = row?.share || 0;
+  const value = row?.share ?? null;
   const colorClass = `provider-${providerKey(providerFor(model))}`;
   return `
     <div class="bar-line">
       <span>${escapeHtml(displayModel(model))}</span>
-      <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${Math.max(1, value * 100)}%"></div></div>
+      <div class="bar-track"><div class="bar-fill ${colorClass}" style="width:${(value ?? 0) * 100}%"></div></div>
       <strong>${pct(value)}</strong>
     </div>`;
 }
@@ -1089,7 +1092,19 @@ function coefficientPromptTable(prompt, sections, models, rowMaps) {
           </tbody>
         </table>
       </div>
+      ${coefficientSampleNote(models, rowMaps)}
     </section>`;
+}
+
+function coefficientSampleNote(models, rowMaps) {
+  const notes = models.flatMap((model) => {
+    const row = firstCoefficientRow(rowMaps.get(model));
+    if (!row || row.nChoiceSetsRaw == null || row.nChoiceSetsFit == null || row.nChoiceSetsFit >= row.nChoiceSetsRaw) return [];
+    const categories = row.nCategoriesRaw != null && row.nCategoriesFit != null
+      ? `; ${num(row.nCategoriesFit)} of ${num(row.nCategoriesRaw)} categories` : "";
+    return [`${displayModel(model)}: ${num(row.nChoiceSetsFit)} of ${num(row.nChoiceSetsRaw)} recorded choice sets contribute to the fit${categories}.`];
+  });
+  return notes.length ? `<p class="table-note">${escapeHtml(notes.join(" "))} Counts exclude filtered or non-informative sets; raw trials are retained.</p>` : "";
 }
 
 function coefficientSectionRows(section, models, rowMaps) {

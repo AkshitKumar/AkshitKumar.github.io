@@ -1510,6 +1510,16 @@ main {
     margin-left: 0;
   }
 
+  .timeline-axis {
+    height: 64px;
+  }
+
+  .timeline-axis span {
+    top: 28px;
+    font-size: 11px;
+    transform: translateX(-50%) rotate(-60deg);
+  }
+
   .timeline-row {
     grid-template-columns: 1fr;
     gap: 4px;
