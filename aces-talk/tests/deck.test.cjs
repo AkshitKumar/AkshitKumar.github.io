@@ -33,9 +33,10 @@ const context = vm.createContext({ window: {}, document: { createElement: () => 
 vm.runInContext(fs.readFileSync(path.join(root, 'data/summary.js'), 'utf8'), context);
 // Exercise widget rendering without the presentation navigation or a browser.
 const widgetCode = fs.readFileSync(path.join(root, 'deck.js'), 'utf8').split('/* ================= DECK ENGINE')[0];
-vm.runInContext(widgetCode + 'globalThis.api = {initTimeline, initMarketShare, initCoefTable, initPositionRadar};})();', context);
+vm.runInContext(widgetCode + 'globalThis.api = {initTimeline, initMarketShare, initCoefTable, initPositionRadar, priceEquivalentChange};})();', context);
 const { api, window: { ACES_DASHBOARD_DATA: data } } = context;
-const newModels = ['gpt-6-astra', 'claude-fable-5-1'];
+const newModels = ['gpt-6-astra', 'claude-fable-5-1', 'gemini-4-argon'];
+const newNames = ['GPT-6 Astra*', 'Claude Fable 5.1*', 'Gemini 4 Argon*'];
 for (const model of newModels) {
   const runs = data.coverage.filter(r => r.model === model);
   assert.equal(runs.length, 6);
@@ -56,6 +57,8 @@ assert.match(timeline.innerHTML, /GPT-6 Astra/);
 assert.match(timeline.innerHTML, /Claude Fable 5.1/);
 assert.match(timeline.innerHTML, /September 3, 2026/);
 assert.match(timeline.innerHTML, /September 1, 2026/);
+assert.match(timeline.innerHTML, /October 13, 2026/);
+assert.match(timeline.innerHTML, /Gemini 4 Argon/);
 for (const match of timeline.innerHTML.matchAll(/left:([\d.]+)%/g)) {
   assert.ok(Number(match[1]) >= 0 && Number(match[1]) <= 100);
 }
@@ -68,10 +71,11 @@ for (const mode of ['UI (screenshot)', 'Headless (JSON)']) {
   assert.equal((html.match(/class="ms-prod"/g) || []).length, 8);
   assert.match(html, /GPT-6 Astra\*/);
   assert.match(html, /Claude Fable 5.1\*/);
+  assert.match(html, /Gemini 4 Argon\*/);
   assert.match(html, /0.0%/);
   assert.match(html, /High reasoning/);
   assert.match(html, mode === 'UI (screenshot)' ? /57.0%/ : /65.0%/);
-  if (mode === 'Headless (JSON)') assert.match(html, /class="mval">n\/a/);
+  assert.doesNotMatch(html, /class="mval">n\/a/);
 }
 
 for (const mode of ['UI (screenshot)', 'Headless (JSON)']) {
@@ -109,12 +113,40 @@ for (const mode of ['UI (screenshot)', 'Headless (JSON)']) {
     assert.match(html, /12.5% BASELINE/);
     assert.doesNotMatch(html, /NaN|undefined/);
     for (const model of newModels) {
-      const label = model === 'gpt-6-astra' ? 'GPT-6 Astra*' : 'Claude Fable 5.1*';
+      const label = newNames[newModels.indexOf(model)];
       const values = [...html.matchAll(/<title>([^<]+): ([\d.]+)%<\/title>/g)]
         .filter(m => m[1].startsWith(label)).map(m => Number(m[2]));
       assert.equal(values.length, 8);
       assert.ok(Math.abs(values.reduce((a, b) => a + b, 0) - 100) <= 0.41);
     }
+  }
+
+  const tradeoffs = new Element();
+  tradeoffs.setAttribute('data-widget', 'price-tradeoffs');
+  api.initCoefTable(tradeoffs);
+  click(tradeoffs, mode);
+  for (const prompt of ['Default', 'Ignore position']) {
+    click(tradeoffs, prompt);
+    const html = tradeoffs.children[1].innerHTML;
+    const modality = mode === 'UI (screenshot)' ? 'ui' : 'headless';
+    const variant = (prompt === 'Default' ? 'def-' : 'ip-') + (modality === 'ui' ? 'ui' : 'hl');
+    const deltas = [[modality === 'ui' ? 'row_1_dummy' : 'position_1_dummy', 1],
+      ['overall_pick_tag', 1], ['rating', 0.1], ['log_rating_count', Math.log(2)],
+      ['sponsored_tag', 1], ['scarcity_tag', 1]];
+    for (const model of newModels) {
+      const rows = data.coefficients.filter(r => r.model === model && r.prompt === variant);
+      const price = rows.find(r => r.term === 'log_price').estimate;
+      for (const [term, multiplier] of deltas) {
+        const delta = rows.find(r => r.term === term).estimate * multiplier;
+        const result = Math.exp(-delta / price) - 1;
+        assert.equal(api.priceEquivalentChange(price, delta), result);
+        const normalized = Math.abs(result) < 0.0005 ? 0 : result;
+        const label = (normalized > 0 ? '+' : '') + (normalized * 100).toFixed(1) + '%';
+        assert.ok(html.includes(label), `${model}/${variant}/${term}: ${label}`);
+      }
+    }
+    assert.doesNotMatch(html, /NaN|undefined|n\/a/);
+    assert.match(html, modality === 'ui' ? /Row 1 \(vs Row 2\)/ : /Position 1 \(vs Position 8\)/);
   }
 }
 
@@ -124,4 +156,6 @@ click(unavailable, 'Ignore pos + promo');
 assert.equal((unavailable.children[1].innerHTML.match(/class="pos-radar-svg"/g) || []).length, 3);
 assert.match(unavailable.children[1].innerHTML, /no fitted data/);
 assert.doesNotMatch(unavailable.children[1].innerHTML, /pos-radar-line provider-openai/);
-console.log('Talk checks passed: 12 new run slices, all products, both interfaces/prompts, coefficients, timelines, and missing-data states.');
+assert.equal(api.priceEquivalentChange(0, 1), null);
+assert.equal(api.priceEquivalentChange(-1, NaN), null);
+console.log('Talk checks passed: 18 new run slices, all products, both interfaces/prompts, coefficients, price trade-offs, timelines, and missing-data states.');

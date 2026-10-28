@@ -1134,6 +1134,10 @@ main {
   font-size: 21px;
 }
 
+.coefficient-table thead .provider-text-openai { color: var(--openai); }
+.coefficient-table thead .provider-text-anthropic { color: var(--anthropic); }
+.coefficient-table thead .provider-text-google { color: var(--google); }
+
 .coefficient-table tbody th {
   width: 230px;
   color: var(--ink);
@@ -1202,6 +1206,19 @@ main {
 
 .price-equivalent-table {
   min-width: 680px;
+}
+
+.coefficient-table:is([data-model-count="1"], [data-model-count="2"], [data-model-count="3"]) {
+  min-width: 560px;
+  table-layout: fixed;
+}
+
+.coefficient-table:is([data-model-count="1"], [data-model-count="2"], [data-model-count="3"]) th:first-child:not([colspan]) {
+  width: 34%;
+}
+
+.coefficient-table thead th {
+  overflow-wrap: anywhere;
 }
 
 .price-equivalent-table .coef-section-row th {

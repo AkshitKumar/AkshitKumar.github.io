@@ -5,6 +5,7 @@
 
   /* ---------------- model metadata ---------------- */
   var MODEL_NAMES = {
+    'gemini-4-argon': 'Gemini 4 Argon',
     'claude-fable-5-1': 'Claude Fable 5.1',
     'claude-fable-5': 'Claude Fable 5',
     'claude-opus-4-1-20250805': 'Claude Opus 4.1',
@@ -28,6 +29,8 @@
     'gpt-6-astra': 'GPT-6 Astra'
   };
   var RELEASE = {
+    // Public API release: https://ai.google.dev/gemini-api/docs/changelog#october-13-2026
+    'gemini-4-argon': '2026-10-13',
     'gpt-6-astra': '2026-09-03', 'claude-fable-5-1': '2026-09-01',
     'gpt-4o-2024-11-20': '2024-05-13', 'gpt-4.1-2025-04-14': '2025-04-14',
     'gpt-5': '2025-08-07', 'gpt-5.1': '2025-11-12', 'gpt-5.2': '2025-12-11',
@@ -41,7 +44,7 @@
     'gemini-3-pro-preview': '2025-11-18'
   };
   var PROVIDERS = ['OpenAI', 'Anthropic', 'Google'];
-  var FLAGSHIPS = ['gpt-6-astra', 'claude-fable-5-1', 'gemini-3-pro-preview'];
+  var FLAGSHIPS = ['gpt-6-astra', 'claude-fable-5-1', 'gemini-4-argon'];
   var PROVIDER_COLOR = { OpenAI: '#1a1a1a', Anthropic: '#ff7f0e', Google: '#1a73e8' };
 
   function baseModel(m) { return String(m || '').replace(/__reasoning_.+$/, ''); }
@@ -305,6 +308,7 @@
 
   function initCoefTable(el) {
     var coefs = DATA.coefficients || [];
+    var tradeoffs = el.getAttribute('data-widget') === 'price-tradeoffs';
     var startStep = parseInt(el.getAttribute('data-coef-start') || '0', 10) || 0;
     var state = { models: FLAGSHIPS.slice(), modality: 'ui', prompt: 'def-ui', step: startStep };
     var allModels = preferredModelKeys(coefs);
@@ -361,6 +365,12 @@
       controls.appendChild(controlLine('Setup', setup));
       modelChipsGrouped(controls, allModels, state, 3, render);
 
+      if (tradeoffs) {
+        tableWrap.innerHTML = priceTradeoffTable(state.models, state.modality, lookup);
+        below.innerHTML = '';
+        return;
+      }
+
       var terms = state.modality === 'ui' ? TERM_LABELS_UI : TERM_LABELS_HL;
       var info = COEF_STEP_INFO[Math.min(state.step, COEF_STEP_INFO.length - 1)];
       var html = '<div class="coef-wrap"><table class="coef"><thead><tr><th></th>';
@@ -410,6 +420,39 @@
       state.step = startStep + e.detail.step; render();
     });
     render();
+  }
+
+  function priceEquivalentChange(price, delta) {
+    if (!Number.isFinite(price) || price === 0 || !Number.isFinite(delta)) return null;
+    var change = Math.exp(-delta / price) - 1;
+    return Number.isFinite(change) ? change : null;
+  }
+
+  function priceTradeoffTable(models, modality, lookup) {
+    var rows = [
+      modality === 'ui' ? ['row_1_dummy', 'Row 1 (vs Row 2)', 1] : ['position_1_dummy', 'Position 1 (vs Position 8)', 1],
+      ['overall_pick_tag', 'Overall Pick tag', 1],
+      ['rating', '+0.1 rating', 0.1],
+      ['log_rating_count', 'Double reviews', Math.log(2)],
+      ['sponsored_tag', 'Sponsored tag', 1],
+      ['scarcity_tag', 'Scarcity tag', 1]
+    ];
+    var html = '<div class="coef-wrap"><table class="coef price-tradeoffs"><thead><tr><th>Change holding utility fixed</th>';
+    models.forEach(function (m) {
+      html += '<th style="color:' + PROVIDER_COLOR[providerOf(m)] + '">' + esc(nameOf(m)) + '</th>';
+    });
+    html += '</tr></thead><tbody>';
+    rows.forEach(function (row) {
+      html += '<tr><th>' + row[1] + '</th>';
+      models.forEach(function (m) {
+        var price = lookup(m, 'log_price'), effect = lookup(m, row[0]);
+        var value = price && effect ? priceEquivalentChange(price.estimate, effect.estimate * row[2]) : null;
+        var normalized = value != null && Math.abs(value) < 0.0005 ? 0 : value;
+        html += '<td>' + (normalized == null ? 'n/a' : (normalized > 0 ? '+' : '') + (normalized * 100).toFixed(1) + '%') + '</td>';
+      });
+      html += '</tr>';
+    });
+    return html + '</tbody></table></div><div class="table-note">Price change = exp(&minus;&Delta;utility / price coefficient) &minus; 1. Positive values indicate an equivalent price increase; negative values indicate a price cut. Product fixed effects held constant. Model-name * = high reasoning.</div>';
   }
 
   /* ================= POSITION RADARS ================= */
@@ -703,6 +746,7 @@
       if (kind === 'timeline') initTimeline(el);
       else if (kind === 'market-share') initMarketShare(el);
       else if (kind === 'coef-table') initCoefTable(el);
+      else if (kind === 'price-tradeoffs') initCoefTable(el);
       else if (kind === 'position-radar') initPositionRadar(el);
     } catch (err) {
       el.innerHTML = '<div class="table-note">Widget failed: ' + esc(err.message) + '</div>';

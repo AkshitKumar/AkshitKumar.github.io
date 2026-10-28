@@ -62,6 +62,7 @@ const els = {
 };
 
 const modelNames = {
+  "gemini-4-argon": "Gemini 4 Argon",
   "claude-fable-5-1": "Claude Fable 5.1",
   "claude-fable-5": "Claude Fable 5",
   "claude-opus-4-1-20250805": "Claude Opus 4.1",
@@ -86,6 +87,7 @@ const modelNames = {
 };
 
 const modelReleaseInfo = {
+  "gemini-4-argon": { date: "2026-10-13", provider: "Google", source: "https://ai.google.dev/gemini-api/docs/changelog#october-13-2026" },
   "gpt-6-astra": { date: "2026-09-03", provider: "OpenAI", source: "https://developers.openai.com/api/docs/changelog" },
   "claude-fable-5-1": { date: "2026-09-01", provider: "Anthropic", source: "https://platform.claude.com/docs/en/models/fable-5-1/overview" },
   "gpt-4o-2024-11-20": { date: "2024-05-13", provider: "OpenAI", source: "OpenAI" },
@@ -258,7 +260,7 @@ function defaultModelForScope(scope, models) {
   if (scope.experiment === "market_share") {
     return modelKeyForPreferred(models, "gpt-6-astra") || modelKeyForPreferred(models, "gpt-5.6-sol") || models[0] || "";
   }
-  const preferred = ["gpt-6-astra", "claude-fable-5-1", "gpt-5.6-sol", "gpt-5.5", "claude-opus-4-8", "claude-fable-5"];
+  const preferred = ["gpt-6-astra", "claude-fable-5-1", "gemini-4-argon", "gpt-5.6-sol", "gpt-5.5", "claude-opus-4-8", "claude-fable-5"];
   return preferred.map((model) => modelKeyForPreferred(models, model)).find(Boolean) || models[0] || "";
 }
 
@@ -274,7 +276,7 @@ function defaultChoiceModels(models) {
   const preferred = [
     ["gpt-6-astra", "gpt-5.6-sol", "gpt-5.5", "gpt-5.1"],
     ["claude-fable-5-1", "claude-fable-5", "claude-opus-4-8", "claude-opus-4-5-20251101"],
-    ["gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"],
+    ["gemini-4-argon", "gemini-3-pro-preview", "gemini-2.5-pro", "gemini-2.5-flash"],
   ];
   const chosen = preferred
     .map((group) => group.map((model) => modelKeyForPreferred(models, model)).find(Boolean))
@@ -1076,7 +1078,7 @@ function coefficientPromptTable(prompt, sections, models, rowMaps) {
     <section class="coefficient-prompt-table">
       <h3>${escapeHtml(promptLabel[prompt] || prompt)}</h3>
       <div class="coefficient-table-wrap">
-        <table class="coefficient-table">
+        <table class="coefficient-table" data-model-count="${models.length}">
           <thead>
             <tr>
               <th>Variable</th>
@@ -1127,7 +1129,7 @@ function priceEquivalentPromptTable(prompt, models, rowMaps) {
     <section class="coefficient-prompt-table">
       <h3>${escapeHtml(promptLabel[prompt] || prompt)}</h3>
       <div class="coefficient-table-wrap">
-        <table class="coefficient-table price-equivalent-table">
+        <table class="coefficient-table price-equivalent-table" data-model-count="${models.length}">
           <thead>
             <tr>
               <th></th>
