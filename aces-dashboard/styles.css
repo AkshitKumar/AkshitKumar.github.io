@@ -16,6 +16,7 @@
   --compare-soft: #fff3df;
   --violet: #034f46;
   --google: #1a73e8;
+  --meta: #007c91;
   --anthropic: #ff7f0e;
   --openai: #1a1a1a;
   --danger: #b42318;
@@ -212,6 +213,13 @@ main {
   border-color: var(--google);
   background: #eef6ff;
   color: var(--google);
+}
+
+.choice-chip.provider-meta { color: var(--meta); }
+.choice-chip.provider-meta.active {
+  border-color: var(--meta);
+  background: #e6f5f6;
+  color: var(--meta);
 }
 
 .control-group span {
@@ -674,6 +682,16 @@ main {
   font-weight: 800;
 }
 
+.provider-text-meta { color: var(--meta); font-weight: 800; }
+.bar-fill.provider-meta,
+.legend-dot.provider-meta,
+.timeline-marker.provider-meta { background: var(--meta); }
+.radar-line.provider-meta,
+.radar-dot.provider-meta { stroke: var(--meta); }
+.radar-area.provider-meta,
+.radar-dot.provider-meta { fill: var(--meta); }
+.radar-legend i.provider-meta { color: var(--meta); }
+
 .position-chart {
   display: grid;
   gap: 14px;
@@ -913,6 +931,14 @@ main {
   border-top: 4px solid var(--google);
 }
 
+.radar-card.provider-meta { border-top: 4px solid var(--meta); }
+.radar-family-grid.four-providers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (max-width: 850px) {
+  .radar-family-grid.four-providers { grid-template-columns: minmax(0, 1fr); }
+}
+
 .radar-card-heading {
   display: flex;
   align-items: baseline;
@@ -1091,6 +1117,10 @@ main {
   min-width: 0;
 }
 
+.coefficient-prompt-grid.wide-comparison {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 640px), 1fr));
+}
+
 .coefficient-prompt-table h3 {
   margin: 0 0 8px;
   font-family: var(--display);
@@ -1137,6 +1167,7 @@ main {
 .coefficient-table thead .provider-text-openai { color: var(--openai); }
 .coefficient-table thead .provider-text-anthropic { color: var(--anthropic); }
 .coefficient-table thead .provider-text-google { color: var(--google); }
+.coefficient-table thead .provider-text-meta { color: var(--meta); }
 
 .coefficient-table tbody th {
   width: 230px;
@@ -1215,6 +1246,25 @@ main {
 
 .coefficient-table:is([data-model-count="1"], [data-model-count="2"], [data-model-count="3"]) th:first-child:not([colspan]) {
   width: 34%;
+}
+
+.coefficient-table[data-model-count="4"] {
+  min-width: 640px;
+  table-layout: fixed;
+}
+
+.coefficient-table[data-model-count="4"] th,
+.coefficient-table[data-model-count="4"] td {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.coefficient-table[data-model-count="4"] th:first-child:not([colspan]) {
+  width: 28%;
+}
+
+.coefficient-table[data-model-count="4"] thead th {
+  font-size: 18px;
 }
 
 .coefficient-table thead th {

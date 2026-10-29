@@ -62,6 +62,7 @@ const els = {
 };
 
 const modelNames = {
+  "muse-spark-1.3-contributor": "Muse Spark 1.3 Contributor",
   "gemini-4-argon": "Gemini 4 Argon",
   "claude-fable-5-1": "Claude Fable 5.1",
   "claude-fable-5": "Claude Fable 5",
@@ -87,6 +88,7 @@ const modelNames = {
 };
 
 const modelReleaseInfo = {
+  "muse-spark-1.3-contributor": { date: "2026-09-02", provider: "Meta", source: "https://ai.meta.com/events/" },
   "gemini-4-argon": { date: "2026-10-13", provider: "Google", source: "https://ai.google.dev/gemini-api/docs/changelog#october-13-2026" },
   "gpt-6-astra": { date: "2026-09-03", provider: "OpenAI", source: "https://developers.openai.com/api/docs/changelog" },
   "claude-fable-5-1": { date: "2026-09-01", provider: "Anthropic", source: "https://platform.claude.com/docs/en/models/fable-5-1/overview" },
@@ -111,7 +113,7 @@ const modelReleaseInfo = {
   "gemini-3-flash-preview": { date: "2025-12-17", provider: "Google" },
 };
 
-const providerOrder = ["OpenAI", "Anthropic", "Google"];
+const providerOrder = ["OpenAI", "Anthropic", "Google", "Meta"];
 const hiddenPromptVariants = new Set(["ip-pp-ui", "ip-pp-hl"]);
 
 function modelKeyFor(model, reasoning = "") {
@@ -157,7 +159,9 @@ function displayModel(modelOrKey) {
 }
 
 function highReasoningNote(models) {
-  return models.some((model) => isHighReasoning(model)) ? " · * High reasoning" : "";
+  const high = models.some((model) => isHighReasoning(model)) ? " · * High reasoning" : "";
+  const muse = models.some((model) => baseModel(model) === "muse-spark-1.3-contributor");
+  return high + (muse ? " · Muse Spark Contributor: headless only" : "");
 }
 
 function displayCategory(category) {
@@ -624,6 +628,7 @@ function renderModelTimeline() {
       <span><i class="legend-dot provider-openai"></i>OpenAI</span>
       <span><i class="legend-dot provider-anthropic"></i>Anthropic</span>
       <span><i class="legend-dot provider-google"></i>Google</span>
+      <span><i class="legend-dot provider-meta"></i>Meta</span>
       <span class="reasoning-note"><strong>*</strong> High reasoning</span>
     </div>`;
 }
@@ -728,11 +733,12 @@ function renderPositionHeatmap() {
 }
 
 function positionPromptRadar(prompt, models, coefficientRows) {
+  const providers = providerOrder.filter((provider) => provider !== "Meta" || models.some((model) => providerFor(model) === provider));
   return `
     <section class="position-prompt-panel radar-prompt-panel">
       <h3>${escapeHtml(promptLabel[prompt] || prompt)}</h3>
-      <div class="radar-family-grid">
-        ${providerOrder.map((provider) => positionProviderRadar(prompt, provider, models, coefficientRows)).join("")}
+      <div class="radar-family-grid${providers.length === 4 ? " four-providers" : ""}">
+        ${providers.map((provider) => positionProviderRadar(prompt, provider, models, coefficientRows)).join("")}
       </div>
     </section>`;
 }
@@ -1057,7 +1063,7 @@ function renderCoefficients() {
     return;
   }
   els.coefficientChart.innerHTML = `
-    <div class="coefficient-prompt-grid">
+    <div class="coefficient-prompt-grid${models.length > 3 ? " wide-comparison" : ""}">
       ${prompts.map((prompt) => coefficientPromptTable(prompt, sections, models, promptMaps.get(prompt))).join("")}
     </div>
     <p class="table-note">Entries report conditional-logit coefficients with standard errors in parentheses. * p&lt;0.05, ** p&lt;0.01, *** p&lt;0.001.</p>
@@ -1066,7 +1072,7 @@ function renderCoefficients() {
         <span class="panel-kicker">Seller trade-offs</span>
         <h3>Price-Equivalent Trade-offs</h3>
       </div>
-      <div class="coefficient-prompt-grid">
+      <div class="coefficient-prompt-grid${models.length > 3 ? " wide-comparison" : ""}">
         ${prompts.map((prompt) => priceEquivalentPromptTable(prompt, models, promptMaps.get(prompt))).join("")}
       </div>
       <p class="table-note">Entries are multiplicative price changes that keep utility fixed: exp(-Delta utility / beta ln(price)) - 1.</p>
