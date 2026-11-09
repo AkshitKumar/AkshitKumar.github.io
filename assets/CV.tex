@@ -1,0 +1,378 @@
+\documentclass[11pt,letterpaper]{article}
+
+\usepackage[
+  letterpaper,
+  left=0.98in,
+  right=0.98in,
+  top=0.85in,
+  bottom=0.76in,
+  footskip=0.36in
+]{geometry}
+\usepackage{fontspec}
+\usepackage{microtype}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{needspace}
+
+\IfFontExistsTF{Helvetica}{\setmainfont{Helvetica}}{\setmainfont{Arial}}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blue,
+  urlcolor=blue
+}
+\urlstyle{same}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.03}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\newcommand{\cvfooterfont}{\fontsize{9}{11}\selectfont}
+\fancyfoot[L]{{\cvfooterfont Curriculum Vitae | Akshit Kumar}}
+\fancyfoot[R]{{\cvfooterfont \thepage}}
+
+\newcommand{\cvsection}[1]{%
+  \Needspace{8\baselineskip}%
+  \vspace{1.05em}%
+  {\fontsize{14}{16}\selectfont\bfseries\MakeUppercase{#1}}\par
+  \vspace{2pt}%
+  \hrule height 0.35pt
+  \vspace{0.72em}%
+}
+
+\newcommand{\cvsubsection}[1]{%
+  \Needspace{6\baselineskip}%
+  \vspace{0.85em}%
+  {\bfseries #1}\par
+  \vspace{0.35em}%
+}
+
+\newcommand{\cventry}[2]{%
+  \noindent
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.55in}@{\hspace{0.25in}}>{\raggedright\arraybackslash}X@{}}
+    #1 &
+    \begin{minipage}[t]{\linewidth}
+      #2
+    \end{minipage}
+  \end{tabularx}\par
+  \vspace{0.66em}%
+}
+
+\newcommand{\cvappointment}[2]{%
+  \noindent
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.55in}@{\hspace{0.25in}}>{\raggedright\arraybackslash}X@{}}
+    #1 &
+    \begin{minipage}[t]{\linewidth}
+      #2
+    \end{minipage}
+  \end{tabularx}\par
+  \vspace{0.66em}%
+}
+
+\newcommand{\cvaward}[2]{%
+  \noindent
+  \begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{1.55in}@{\hspace{0.25in}}>{\raggedright\arraybackslash}X@{}}
+    #1 & #2
+  \end{tabularx}\par
+  \vspace{0.18em}%
+}
+
+\newenvironment{cvpubs}{%
+  \begin{enumerate}[
+    leftmargin=0.75in,
+    labelwidth=0.28in,
+    labelsep=0.22in,
+    align=left,
+    itemsep=0.62em,
+    topsep=0.15em,
+    parsep=0pt
+  ]
+}{\end{enumerate}}
+
+\newenvironment{cvnotes}{%
+  \begin{itemize}[
+    label=\textbullet,
+    leftmargin=1.85em,
+    labelsep=0.45em,
+    itemsep=0.1em,
+    topsep=0.18em,
+    parsep=0pt
+  ]
+}{\end{itemize}}
+
+\newcommand{\talktitle}[1]{%
+  \vspace{0.45em}%
+  {\raggedright #1\par}%
+  \vspace{0.12em}%
+}
+
+\newcommand{\talkvenuefont}{\fontsize{9.1}{10.5}\selectfont}
+
+\newenvironment{cvpubnotes}{%
+  \begin{cvnotes}%
+  \talkvenuefont
+}{%
+  \end{cvnotes}%
+}
+
+\newcommand{\talkvenue}[2]{%
+  \noindent\hspace*{0.25in}%
+  {\talkvenuefont
+  \begin{tabularx}{\dimexpr\textwidth-0.25in\relax}{@{}>{\raggedright\arraybackslash}X>{\raggedleft\arraybackslash}p{0.95in}@{}}
+    #1 & #2
+  \end{tabularx}}\par
+}
+
+\begin{document}
+\thispagestyle{empty}
+
+\vspace*{0.04in}
+\begin{center}
+  {\fontsize{16}{18}\selectfont\bfseries AKSHIT KUMAR}\par
+  \vspace{0.45em}
+  Updated: November 2026\par
+  \vspace{1.0em}
+  Department of Management, University of Toronto Scarborough\par
+  Rotman School of Management (cross-appointed)\par
+  \href{mailto:akshitkumar100@gmail.com}{akshitkumar100@gmail.com} | 
+  \href{https://akshitkumar.github.io/}{akshitkumar.github.io}
+\end{center}
+
+\vspace{0.35em}
+
+\cvsection{Research Interests}
+I am broadly interested in the operations of online platforms and marketplaces, with a particular focus on AI agents and recommendation systems.
+
+\cvsection{Academic Appointments}
+\cvappointment{July 2026 - Present}{%
+  \textbf{Assistant Professor, Operations Management}\\
+  Department of Management, University of Toronto Scarborough\\
+  Rotman School of Management (cross-appointed)
+}
+
+\cvappointment{July 2025 - June 2026}{%
+  \textbf{Postdoctoral Researcher}\\
+  Center for Algorithms, Data and Market Design, Yale University
+}
+
+\cvsection{Education}
+\cventry{Sep 2020 - May 2025}{%
+  \textbf{Ph.D., Operations Management}\\
+  Columbia University, Graduate School of Business\\
+  Advisors: Prof. Omar Besbes and Prof. Yash Kanoria
+}
+
+\cventry{Jul 2018 - May 2020}{%
+  \textbf{M.S., Electrical and Computer Engineering}\\
+  University of Michigan\\
+  Advisor: Prof. Vijay Subramanian
+}
+
+\cventry{Aug 2014 - May 2018}{%
+  \textbf{B.Tech., Electrical Engineering}\\
+  Indian Institute of Technology Madras\\
+  Advisor: Prof. Rahul Vaze
+}
+
+% \clearpage
+\cvsection{Publications}
+\cvsubsection{Working Papers}
+\begin{cvpubs}
+  \item A. Kumar. Feature-Based Dynamic Matching in the Dark. \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6839679}{[Link]}
+
+  \item A. Kumar, V. Manshadi, A. Tumu. How Much Should a Conversational Recommender System Converse? \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6481459}{[Link]}
+
+  \item J. Anunrojwong, A. Kumar, R. Kumar. Trading with the STARS: Algorithm Design \& Spectrum of Fundamental Limits for Trading with Storage. \href{https://arxiv.org/abs/2610.07285}{[Link]}
+
+  \item O. Besbes, Y. Kanoria, A. Kumar. Impact of Rankings and Personalized Recommendations in Marketplaces. \href{https://arxiv.org/abs/2506.03369}{[Link]}
+\end{cvpubs}
+
+\cvsubsection{Journal Papers}
+\begin{cvpubs}
+  \item Y. Chen, Y. Kanoria, A. Kumar, W. Zhang. Feature-Based Dynamic Matching. \textit{Operations Research}, 74(2):788-803, 2026. \href{https://pubsonline.informs.org/doi/abs/10.1287/opre.2024.0730}{[Link]}
+  \begin{cvpubnotes}
+    \item Third Place, 2025 Michael H. Rothkopf Junior Researcher Paper Prize.
+    \item First Place, 2024 Jeff McGill RMP Best Student Paper Prize.
+  \end{cvpubnotes}
+
+  \item O. Besbes, Y. Kanoria, A. Kumar. Dynamic Resource Allocation: Algorithmic Design Principles and Spectrum of Achievable Performances. \textit{Operations Research}, 73(3):1273-1288, 2025. \href{https://pubsonline.informs.org/doi/10.1287/opre.2022.0504}{[Link]}
+  \begin{cvpubnotes}
+    \item Second Place, 2024 Michael H. Rothkopf Junior Researcher Paper Prize.
+    \item Finalist, 2023 INFORMS George Nicholson Student Paper Competition.
+    \item Finalist, 2023 Jeff McGill RMP Best Student Paper Prize.
+  \end{cvpubnotes}
+\end{cvpubs}
+
+\cvsubsection{Peer Reviewed Conference Proceedings}
+\begin{cvpubs}
+  \item A. Kumar. Feature-Based Dynamic Matching in the Dark. \textit{WINE 2026: Conference on Web and Internet Economics}. \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6839679}{[Link]}
+
+  \item A. Kumar, V. Manshadi, A. Tumu. How Much Should a Conversational Recommender System Converse? \textit{EC'26: ACM Conference on Economics and Computation}. \href{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6481459}{[Link]}
+
+  \item A. Allouah, O. Besbes, J. Figueroa, Y. Kanoria, A. Kumar. What Is Your AI Agent Buying? Evaluation, Biases, Model Dependence, \& Emerging Implications of Agentic \mbox{E-Commerce}. \textit{WWW'26: ACM Web Conference}. \href{https://dl.acm.org/doi/10.1145/3774904.3792943}{[Link]}
+
+  \item O. Besbes, Y. Kanoria, A. Kumar. Impact of Rankings and Personalized Recommendations in Marketplaces. \textit{EC'25: ACM Conference on Economics and Computation}. \href{https://dl.acm.org/doi/10.1145/3736252.3742547}{[Link]}
+
+  \item A. Kumar, T. Peng, Y. Wu, A. Zeevi. Performance of LLMs on Stochastic Modeling Operations Research Problems: From Theory to Practice. \textit{WSC'25: Proceedings of the 2025 Winter Simulation Conference}. \href{https://www.informs-sim.org/wsc25papers/con281.pdf}{[Link]}
+
+  \item O. Besbes, Y. Kanoria, A. Kumar. The Fault in Our Recommendations: On the Perils of Optimizing the Measurable. \textit{RecSys'24: ACM Conference on Recommender Systems}. \href{https://dl.acm.org/doi/10.1145/3640457.3688144}{[Link]}
+
+  \item A. Kumar, P. Hegde, R. Vaze, A. Alloum, C. Adjih. Breaking the Unit Throughput Barrier in Random Access Protocol Based Distributed Systems. \textit{NCC'23: 29th National Conference on Communications}. \href{https://ieeexplore.ieee.org/document/10068073}{[Link]}
+
+  \item Y. Chen, Y. Kanoria, A. Kumar, W. Zhang. Feature-Based Dynamic Matching. \textit{EC'23: ACM Conference on Economics and Computation}. \href{https://dl.acm.org/doi/10.1145/3580507.3597797}{[Link]}
+
+  \item O. Besbes, Y. Kanoria, A. Kumar. The Multi-secretary Problem with Many Types. \textit{EC'22: ACM Conference on Economics and Computation}. \href{https://dl.acm.org/doi/10.1145/3490486.3538371}{[Link]}
+
+  \item A. Jain, Z. Kapetanovic, A. Kumar, V. N. Swamy, R. Patil, D. Vasisht, R. Sharma, M. Swaminathan, R. Chandra, A. Badam, G. Ranade, S. Sinha, A. U. Nambi. Low-cost aerial imaging for small holder farmers. \textit{COMPASS'19: Proceedings of the 2nd ACM SIGCAS Conference on Computing and Sustainable Societies}. \href{https://dl.acm.org/doi/10.1145/3314344.3332485}{[Link]}
+  \begin{cvpubnotes}
+    \item Best Paper Award at COMPASS'19.
+  \end{cvpubnotes}
+
+  \item P. Hegde, A. Kumar, R. Vaze. Speed scaling under QoS constraints with finite buffer. \textit{WiOpt'18: 16th International Symposium on Modeling and Optimization in Mobile, Ad Hoc, and Wireless Networks}. \href{https://ieeexplore.ieee.org/abstract/document/8362845}{[Link]}
+\end{cvpubs}
+
+\cvsection{Awards}
+\cvaward{2026}{Finalist, JFIG Junior Faculty Interest Group Paper Competition}
+\cvaward{2025}{Third Place, Michael H. Rothkopf Junior Researcher Paper Prize}
+\cvaward{2024}{First Place, Jeff McGill RMP Best Student Paper Prize}
+\cvaward{2024}{Second Place, Michael H. Rothkopf Junior Researcher Paper Prize}
+\cvaward{2024}{Rising Star, Stanford Management Science and Engineering}
+\cvaward{2023}{Finalist, INFORMS George Nicholson Student Paper Competition}
+\cvaward{2023}{Finalist, Jeff McGill RMP Best Student Paper Prize}
+\cvaward{2023 - 2024}{Deming Doctoral Fellowship, Columbia Business School}
+\cvaward{2023}{Narula Doctoral Fellowship, Columbia Business School}
+\cvaward{2019}{Best Paper Award, COMPASS'19}
+\cvaward{2016}{Industry Category Winner at Microsoft Global Hackathon}
+\cvaward{2014}{Kishore Vaigyanik Protsahan Yojana (KVPY) Fellowship}
+\cvaward{2011}{National Talent Search Examination (NTSE) scholarship}
+
+\cvsection{Patents}
+\begin{cvpubs}
+  \item R. Chandra, M. Swaminathan, V. N. Swamy, Z. Kapetanovic, D. Vasisht, A. Kumar, A. Badam, G. Ranade, S. Sinha, R. Patil. Low-cost, Long-term Aerial Imagery. \href{https://patents.google.com/patent/US20180213186A1/en}{[Link]}
+
+  \item R. Chandra, M. Swaminathan, V. N. Swamy, Z. Kapetanovic, D. Vasisht, A. Kumar, A. Mehra, A. Gupta, S. Sinha, R. Patil. Aerial Imaging of a Region Using Above Ground Aerial Camera Platform. \href{https://patents.google.com/patent/US20180213187A1/en}{[Link]}
+\end{cvpubs}
+
+\cvsection{Industry Internships}
+\cventry{Jun 2023 - Sep 2023}{%
+  \textbf{Amazon SCOT}, Bellevue, WA\\
+  Developed multi-objective optimization algorithms for order fulfillment.
+}
+
+\cventry{May 2018 - Aug 2018}{%
+  \textbf{Nokia Bell Labs}, Paris, France\\
+  Developed decoding schemes for distributed wireless systems.
+}
+
+\cventry{Jun 2016 - Aug 2016}{%
+  \textbf{Microsoft Research}, Bangalore, India\\
+  Built low-cost precision-agriculture tools for smallholder farmers.
+}
+
+% \cvsection{Teaching Experience}
+% \cventry{Fall 2023}{Business Analytics (MBA Core), Columbia University, Teaching Assistant}
+% \cventry{Spring 2023}{Operations Management (EMBA Core), Columbia University, Teaching Assistant}
+% \cventry{Spring 2022}{Business Analytics (EMBA Core), Columbia University, Teaching Assistant}
+% \cventry{Fall 2021}{Foundations of Optimization (Ph.D. Core), Columbia University, Teaching Assistant}
+
+\cvsection{Professional Service}
+\begin{cvnotes}
+  \item \textbf{Journal Reviewer:} Mathematics of Operations Research, Operations Research, Management Science, Manufacturing and Service Operations Management, Marketing Science, Information Systems Research
+  \item \textbf{Program Committee Member:} EC 2026
+  \item \textbf{Conference Reviewer/Sub-Reviewer:} MSOM Main Conference (2025, 2026)
+  \item \textbf{Workshop Reviewer:} NeurIPS Workshop on Machine Learning and Operations Research (MLxOR), 2026
+  \item Co-organizer for the 2024 NYC Operations Day PhD Colloquium.
+  \item DRO Internal Seminar series co-organizer (2022-2024).
+  \item DRO PhD student representative (2022-2024).
+\end{cvnotes}
+
+\cvsection{Presentations}
+\talktitle{What Is Your AI Agent Buying? Evaluation, Biases, Model Dependence, and Emerging Implications for Agentic E-Commerce}
+\talkvenue{INFORMS Annual Meeting, San Francisco, CA}{Nov 2026}
+\talkvenue{Workshop on Unstructured Data and Language Models, Ann Arbor, MI}{Jul 2026}
+\talkvenue{ACM Web Conference (Poster), Online}{Jul 2026}
+\talkvenue{ESIF Economics and AI+ML Meeting, Ithaca, NY}{Jun 2026}
+\talkvenue{Behavioral Operations Conference, Tempe, AZ}{May 2026}
+\talkvenue{Business Implications of Generative AI (Big.AI MIT), Boston, MA}{Apr 2026}
+\talkvenue{Workshop on Information Systems and Economics (WISE), Nashville, TN}{Dec 2025}
+\talkvenue{MIT Conference on Digital Experimentation (CODE), Boston, MA}{Nov 2025}
+\talkvenue{Consumer Reports, New York, NY}{Nov 2025}
+\talkvenue{Rotman Young Scholar Seminar, Online}{Nov 2025}
+\talkvenue{Yale Computer Science and Economics Day, New Haven, CT}{Sep 2025}
+\talkvenue{Workshop on AI and the Future of Collaborative Innovation, New York, NY}{Sep 2025}
+
+\talktitle{Feature-Based Dynamic Matching in the Dark}
+\talkvenue{INFORMS Annual Meeting, San Francisco, CA}{Nov 2026}
+
+\talktitle{How Much Should a Conversational Recommender System Converse?}
+\talkvenue{INFORMS Annual Meeting, San Francisco, CA}{Nov 2026}
+
+\talktitle{Impact of Rankings and Personalized Recommendations in Marketplaces}
+\talkvenue{INFORMS Annual Meeting, Atlanta, GA}{Oct 2025}
+\talkvenue{Revenue Management and Pricing (RMP) Conference, New York, NY}{Jul 2025}
+\talkvenue{EC'25: ACM Conference on Economics and Computation, Stanford, CA}{Jul 2025}
+
+\talktitle{Dynamic Resource Allocation: Theory and Practice}
+\talkvenue{From Matching to Markets Workshop, Corsica, France}{May 2025}
+\talkvenue{Industrial and Systems Engineering, University of Minnesota, Minneapolis, MN}{Jan 2025}
+\talkvenue{Mendoza College of Business, University of Notre Dame, Notre Dame, IN}{Jan 2025}
+\talkvenue{Yale School of Management, New Haven, CT}{Jan 2025}
+\talkvenue{Stanford Graduate School of Business, Stanford, CA}{Jan 2025}
+\talkvenue{Cornell ORIE, Ithaca, NY}{Dec 2024}
+\talkvenue{Cornell Tech ORIE, New York, NY}{Dec 2024}
+\talkvenue{Imperial College Business School, London, England}{Dec 2024}
+\talkvenue{Rotman School of Management, University of Toronto, Toronto, Canada}{Dec 2024}
+\talkvenue{Indian School of Business, Hyderabad, India}{Nov 2024}
+\talkvenue{NUS Business School, Singapore}{Nov 2024}
+\talkvenue{NYU Stern School of Business, New York, NY}{Nov 2024}
+\talkvenue{Wharton School of the University of Pennsylvania, Philadelphia, PA}{Nov 2024}
+
+\talktitle{The Fault in Our Recommendations: On the Perils of Optimizing the Measurable}
+\talkvenue{Yale FDS Workshop on Social Algorithms (Poster)}{Oct 2025}
+\talkvenue{Netflix ML Seminar, Online}{Nov 2024}
+\talkvenue{RecSys'24: ACM Conference on Recommender Systems, Bari, Italy}{Oct 2024}
+
+\talktitle{Dynamic Resource Allocation: Algorithmic Design Principles and Spectrum of Achievable Performances}
+\talkvenue{Workshop on Operations Research and Data Science (WORDS), Duke Fuqua, Durham, NC}{Nov 2024}
+\talkvenue{Operations Rookiepalooza, Kellogg School of Management, Chicago, IL}{Oct 2024}
+\talkvenue{INFORMS Annual Meeting, Seattle, WA}{Oct 2024}
+\talkvenue{Cornell Young Research Workshop, Ithaca, NY}{Oct 2024}
+\talkvenue{Purdue Operations Conference, West Lafayette, IN}{Aug 2024}
+\talkvenue{Industrial Engineering and Operations Research (IEOR) Seminar, IIT Bombay, Mumbai, India}{Aug 2024}
+\talkvenue{International Symposium on Mathematical Programming (ISMP), Montreal, Canada}{Jul 2024}
+\talkvenue{Revenue Management and Pricing (RMP) Conference, Los Angeles, CA}{Jul 2024}
+\talkvenue{MS\&E Rising Stars Workshop, Stanford, CA}{Apr 2024}
+\talkvenue{INFORMS Annual Meeting, Phoenix, AZ}{Oct 2023}
+\talkvenue{Fulfillment Optimization Research Series, Amazon}{Aug 2023}
+\talkvenue{Tata Institute of Fundamental Research (TIFR), Mumbai, India}{May 2023}
+
+\talktitle{Feature-Based Dynamic Matching}
+\talkvenue{INFORMS Annual Meeting, Atlanta, GA}{Oct 2025}
+\talkvenue{INFORMS Annual Meeting, Seattle, WA}{Oct 2024}
+\talkvenue{Manufacturing and Service Operations Management (MSOM) Conference, Minneapolis, MN}{Jul 2024}
+\talkvenue{Marketplace Innovation Workshop, Online}{May 2024}
+\talkvenue{Revenue Management and Pricing (RMP) Conference, London, England}{Jun 2023}
+
+\talktitle{\textup{A PROOF}: Approximately PaReto Optimal Order Fulfillment}
+\talkvenue{Deming Doctoral Fellowship Seminar, Columbia Business School}{May 2024}
+
+\talktitle{The multi-secretary problem with many types}
+\talkvenue{INFORMS Annual Meeting, Indianapolis, IN}{Oct 2022}
+\talkvenue{EC'22: ACM Conference on Economics and Computation, Boulder, CO}{Jul 2022}
+\talkvenue{Manufacturing and Service Operations Management (MSOM) Conference, Munich, Germany}{Jun 2022}
+\talkvenue{Revenue Management and Pricing (RMP) Conference, Online}{Jun 2022}
+
+\cvsection{Skills}
+\textbf{Programming:} Python, C/C++, MATLAB, HTML/CSS\\
+\textbf{Tools:} Git, \LaTeX
+
+\end{document}
