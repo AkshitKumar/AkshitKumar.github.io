@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-eu9RqEmSm2RGPDeQJ3c/f6g7kM/ysrJZraaSd7xuErs='; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self'; frame-src blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Participant explorer · ShopLab</title>
+  <link rel="icon" href="../../images/favicon-32x32.png">
+  <link rel="stylesheet" href="../brief.css">
+  <link rel="stylesheet" href="viewer.css">
+  <script src="viewer.js" defer></script>
+</head>
+<body>
+  <header class="explorer-head">
+    <a class="brand" href="../">ShopLab</a>
+    <nav aria-label="Study navigation">
+      <a href="../">Study findings</a>
+      <button id="lock" type="button" hidden>Lock dashboard</button>
+    </nav>
+  </header>
+  <main>
+    <section class="unlock-panel" id="entry" aria-labelledby="heading">
+      <p class="section-label">Researcher access</p>
+      <h1 id="heading">Participant explorer</h1>
+      <p>Explore each shopper’s stated preferences, browsing history, product choices and responses to AI suggestions.</p>
+      <form id="unlock-form" autocomplete="off">
+        <label for="access-key">Access key</label>
+        <input type="password" id="access-key" autocomplete="off" autocapitalize="none" spellcheck="false" aria-describedby="key-help" required>
+        <p id="key-help">Enter the key shared privately by the researcher.</p>
+        <button type="submit" id="unlock" disabled>Unlock dashboard</button>
+      </form>
+      <p class="notice" id="notice" role="status" aria-live="polite" aria-atomic="true"></p>
+      <noscript><p>Enable JavaScript to unlock the dashboard in your browser.</p></noscript>
+    </section>
+    <div id="workspace" hidden></div>
+  </main>
+</body>
+</html>
