@@ -130,10 +130,10 @@
       }
       graph.append(svgElement("path", {d:path, class:"rank-line " + kind}));
     }
-    for (const kind of ["human", "ai"]) {
-      graph.append(svgElement("circle", {cx:px, cy:y(series[kind][selectedPage-1] / series.pairs),
-        r:kind === "human" ? 4.8 : 3.6, class:"rank-dot " + kind}));
-    }
+    const humanY = y(series.human[selectedPage-1] / series.pairs);
+    const aiY = y(series.ai[selectedPage-1] / series.pairs);
+    graph.append(svgElement("circle", {cx:px, cy:humanY, r:5.4, class:"rank-dot human"}));
+    graph.append(svgElement("rect", {x:px-3, y:aiY-3, width:6, height:6, class:"rank-dot ai"}));
     // Use the same scale for reading the plot as for drawing it.
     graph.onclick = event => {
       const offset = event.clientX - graph.getBoundingClientRect().left;

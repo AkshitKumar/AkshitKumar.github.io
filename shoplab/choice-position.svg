@@ -121,7 +121,7 @@ z
      </g>
     </g>
     <g id="text_14">
-     <text style="fill: #223632; font: 10px 'DejaVu Sans'; text-anchor: middle" x="313.335" y="298.28475" transform="rotate(-0 313.335 298.28475)">Page in the original randomized order</text>
+     <text style="fill: #22312f; font: 10px 'DejaVu Sans'; text-anchor: middle" x="313.335" y="298.28475" transform="rotate(-0 313.335 298.28475)">Page in the original randomized order</text>
     </g>
    </g>
    <g id="matplotlib.axis_2">
@@ -242,7 +242,7 @@ L 512.866759 110.579039
 L 512.866759 99.722394
 L 552.773111 99.722394
 L 552.773111 94.91445
-" clip-path="url(#pf66f0f9136)" style="fill: none; stroke-dasharray: 9.6,6; stroke-dashoffset: 0; stroke: #a54b2e; stroke-width: 2.4"/>
+" clip-path="url(#pf66f0f9136)" style="fill: none; stroke-dasharray: 9.6,6; stroke-dashoffset: 0; stroke: #59666b; stroke-width: 2.4"/>
    </g>
    <g id="line2d_28">
     <defs>
@@ -281,22 +281,22 @@ L 2.25 2.25
 L 2.25 -2.25
 L -2.25 -2.25
 z
-" style="stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
+" style="stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
     </defs>
     <g clip-path="url(#pf66f0f9136)">
-     <use xlink:href="#m17dc7f259b" x="73.896889" y="246.597301" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="113.803241" y="229.536857" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="153.709593" y="212.941699" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="193.615945" y="197.742395" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="233.522296" y="185.179705" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="273.428648" y="171.376255" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="313.335" y="159.744135" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="353.241352" y="146.71616" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="393.147704" y="131.827046" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="433.054055" y="120.815305" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="472.960407" y="110.579039" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="512.866759" y="99.722394" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
-     <use xlink:href="#m17dc7f259b" x="552.773111" y="94.91445" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="73.896889" y="246.597301" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="113.803241" y="229.536857" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="153.709593" y="212.941699" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="193.615945" y="197.742395" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="233.522296" y="185.179705" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="273.428648" y="171.376255" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="313.335" y="159.744135" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="353.241352" y="146.71616" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="393.147704" y="131.827046" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="433.054055" y="120.815305" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="472.960407" y="110.579039" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="512.866759" y="99.722394" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
+     <use xlink:href="#m17dc7f259b" x="552.773111" y="94.91445" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
     </g>
    </g>
    <g id="legend_1">
@@ -310,24 +310,24 @@ L 87.27865 73.029437
      </g>
     </g>
     <g id="text_20">
-     <text style="fill: #223632; font: 9.2px 'DejaVu Sans'; text-anchor: start" x="94.63865" y="76.249437" transform="rotate(-0 94.63865 76.249437)">Shopper’s initial choice</text>
+     <text style="fill: #22312f; font: 9.2px 'DejaVu Sans'; text-anchor: start" x="94.63865" y="76.249437" transform="rotate(-0 94.63865 76.249437)">Shopper’s initial choice</text>
     </g>
     <g id="line2d_31">
      <path d="M 220.119463 73.029437
 L 232.079463 73.029437
 L 244.039463 73.029437
-" style="fill: none; stroke-dasharray: 9.6,6; stroke-dashoffset: 0; stroke: #a54b2e; stroke-width: 2.4"/>
+" style="fill: none; stroke-dasharray: 9.6,6; stroke-dashoffset: 0; stroke: #59666b; stroke-width: 2.4"/>
      <g>
-      <use xlink:href="#m17dc7f259b" x="232.079463" y="73.029437" style="fill: #ffffff; stroke: #a54b2e; stroke-width: 1.2; stroke-linejoin: miter"/>
+      <use xlink:href="#m17dc7f259b" x="232.079463" y="73.029437" style="fill: #ffffff; stroke: #59666b; stroke-width: 1.2; stroke-linejoin: miter"/>
      </g>
     </g>
     <g id="text_21">
-     <text style="fill: #223632; font: 9.2px 'DejaVu Sans'; text-anchor: start" x="251.399463" y="76.249437" transform="rotate(-0 251.399463 76.249437)">AI recommendation</text>
+     <text style="fill: #22312f; font: 9.2px 'DejaVu Sans'; text-anchor: start" x="251.399463" y="76.249437" transform="rotate(-0 251.399463 76.249437)">AI recommendation</text>
     </g>
    </g>
   </g>
   <g id="text_22">
-   <text style="fill: #223632; font: 600 18px 'DejaVu Sans'; text-anchor: start" x="56.43" y="27.4392" transform="rotate(-0 56.43 27.4392)">Where the chosen products appeared</text>
+   <text style="fill: #22312f; font: 600 18px 'DejaVu Sans'; text-anchor: start" x="56.43" y="27.4392" transform="rotate(-0 56.43 27.4392)">Where the chosen products appeared</text>
   </g>
   <g id="text_23">
    <text style="fill: #53645d; font: 10.5px 'DejaVu Sans'; text-anchor: start" x="56.43" y="48.9456" transform="rotate(-0 56.43 48.9456)">Share of choices found by the end of each catalogue page</text>
