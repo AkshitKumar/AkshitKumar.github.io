@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f8f7f2">
+  <title>Who is your AI agent buying for? · ShopLab · Akshit Kumar</title>
+  <meta name="description" content="Two findings from 98 people and 582 hypothetical shopping tasks. How often do AI models agree, and when does personal taste win?">
+  <link rel="icon" href="../images/favicon-32x32.png" type="image/png">
+  <link rel="stylesheet" href="brief.css">
+  <script src="brief.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#findings">Skip to findings</a>
+  <div class="wrap">
+    <header class="site-head">
+      <span class="brand">ShopLab</span>
+      <a class="author" href="../">Akshit Kumar</a>
+    </header>
+    <main>
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="section-label">Research brief &nbsp;·&nbsp; November 2026</p>
+          <h1>Who is your AI agent buying for?</h1>
+          <p>Shoppers described what they wanted, browsed a simulated store and chose a product or left empty-handed. Two AI models independently shopped from the same assortment using that shopper’s brief. Shoppers then evaluated the suggestions.</p>
+        </div>
+        <dl class="study-stats">
+          <div><dt>Shoppers</dt><dd>98</dd></div>
+          <div><dt>Shopping tasks</dt><dd>582</dd></div>
+          <div><dt>Product categories</dt><dd>6</dd></div>
+        </dl>
+      </div>
+      <section class="finding" id="findings" aria-labelledby="agreement-title">
+        <div class="story">
+          <p class="section-label">Model agreement</p>
+          <h2 id="agreement-title">Two models often chose the exact same product.</h2>
+          <p>With up to 100 products to choose from, the two models picked the same item for the same shopper in <strong>313 of 571 tasks (54.8%)</strong>. Pairing their picks across different shoppers in the same category yielded just <strong>4.7%</strong> agreement.</p>
+        </div>
+        <figure class="figure" aria-labelledby="agreement-figure">
+          <div class="chart-head">
+            <h3 id="agreement-figure">Exact product matches</h3>
+            <label class="pair-select"><span class="sr-only">Model pair</span>
+              <select id="pair">
+                <option value="all">All model pairs</option>
+                <option value="claude-gemini">Claude + Gemini</option>
+                <option value="claude-gpt">Claude + GPT</option>
+                <option value="gpt-gemini">GPT + Gemini</option>
+              </select>
+            </label>
+          </div>
+          <div aria-live="polite" aria-atomic="true" id="agreement-results">
+            <div class="bar-row">
+              <div class="bar-label"><span>Same shopper</span><strong id="same-pct">54.8%</strong></div>
+              <div class="track" aria-hidden="true"><span class="fill" id="same-bar" style="width:54.8%"></span></div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label"><span>Different shoppers</span><strong id="cross-pct">4.7%</strong></div>
+              <div class="track" aria-hidden="true"><span class="fill alt" id="cross-bar" style="width:4.7%"></span></div>
+            </div>
+            <div class="axis" aria-hidden="true"><span>0%</span><span>50%</span><span>100%</span></div>
+          </div>
+          <figcaption class="chart-foot"><span id="match-count">313 exact matches across 571 tasks with two valid picks.</span> Different shoppers also saw different prices, ratings and rankings.</figcaption>
+        </figure>
+      </section>
+      <section class="finding" aria-labelledby="taste-title">
+        <div class="story">
+          <p class="section-label">Personal taste</p>
+          <h2 id="taste-title">Beauty is in the eye of the shopper.</h2>
+          <p>In <strong>153 tasks</strong>, an AI suggestion cost no more, had at least as many stars and ratings, and improved on at least one of the three. Shoppers still kept their own pick in <strong>86</strong>. In <strong>26 of those 86 (30.2%)</strong>, they praised their pick’s looks or criticized the appearance of an improving suggestion.</p>
+        </div>
+        <figure class="figure taste" aria-labelledby="taste-figure">
+          <div class="chart-head"><h3 id="taste-figure">When shoppers kept their own pick</h3></div>
+          <div class="dot-field" id="taste-dots" aria-hidden="true"></div>
+          <ul class="legend">
+            <li><i class="key own" aria-hidden="true"></i><span>Favored their own product’s looks</span><strong>17</strong></li>
+            <li><i class="key object" aria-hidden="true"></i><span>Disliked the improving suggestion’s looks</span><strong>9</strong></li>
+            <li><i class="key other" aria-hidden="true"></i><span>Other or unclear explanations</span><strong>60</strong></li>
+          </ul>
+          <figcaption class="chart-foot">Each dot represents one shopping decision. A shopper could give several reasons.</figcaption>
+        </figure>
+      </section>
+      <section class="method" aria-label="Study methods">
+        <details>
+          <summary>How the study and comparisons work</summary>
+          <p><strong>The experiment.</strong> Participants at Rotman described their preferences, browsed a randomized catalogue and made a hypothetical shopping decision. Headphones, sneakers, backpacks, water bottles and toothpaste each had 100 products. Fitness watches had 77. Participants compared suggestions at the end, with model identities hidden and a placebo also present.</p>
+          <p><strong>Model agreement.</strong> Each task assigned two of Claude Opus 5.5, GPT-6.1 Sol and Gemini 3.8 Flash. Both returned a valid product in 571 of 582 tasks. For the different-shopper benchmark, we paired one model’s pick with each of the other model’s picks for different shoppers in the same category, keeping the model pair fixed. We weighted each category and pair by its number of valid tasks. Both preferences and the displayed offers varied across shoppers, so this comparison combines those differences.</p>
+          <p><strong>Personal taste.</strong> We compared the actual price, star rating and number of ratings displayed in each task. We counted each task once, even if two suggestions qualified. Of the 86 decisions to keep the original, 17 explanations favored its looks and nine more identified a visual objection to a qualifying AI suggestion. General references to appearance and comments about a different suggestion fall outside the 26. These are shoppers’ reported reasons. The experiment did not randomize product appearance.</p>
+        </details>
+      </section>
+    </main>
+    <footer class="site-foot"><span>Rotman ShopLab</span><a href="../">Akshit Kumar · University of Toronto</a></footer>
+  </div>
+</body>
+</html>
