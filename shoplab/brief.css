@@ -252,6 +252,28 @@ a:hover { color: var(--wine); }
 .discovery h2 { margin: .4rem 0 0; max-width: 20ch; font: 400 clamp(1.85rem, 3vw, 2.55rem)/1.05 var(--serif); letter-spacing: -.03em; }
 .discovery p + p { margin-top: .6rem; }
 .discovery strong { color: var(--teal); }
+.finding-links { display:flex; flex-wrap:wrap; align-items:baseline; gap:.45rem 1.15rem; padding: .9rem 0; border-bottom:1px solid var(--line); font-size:.91rem; }
+.finding-links span { font-weight:700; }
+.finding[id] { scroll-margin-top:1rem; }
+.insight-table { border-collapse:collapse; width:100%; font-size:1rem; font-variant-numeric:tabular-nums; }
+.insight-table th, .insight-table td { padding:.65rem .35rem; text-align:right; line-height:1.25; }
+.insight-table th:first-child { text-align:left; padding-left:0; }
+.insight-table thead th { border-bottom:1px solid var(--muted); color:var(--muted); font-size:.83rem; font-weight:600; }
+.insight-table tbody tr + tr { border-top:1px solid var(--line); }
+.budget-values { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+.budget-values > div + div { border-left:1px solid var(--line); padding-left:1rem; }
+.budget-values dt { font-weight:600; }
+.budget-values dd { display:grid; gap:.18rem; margin-top:.5rem; }
+.budget-values strong { color:var(--teal); font:500 clamp(2.7rem, 5.5vw, 4.1rem)/1 var(--serif); }
+.budget-values span { color:var(--muted); font-size:.9rem; }
+.watch-group h4 { margin:0 0 .4rem; font:600 1rem/1.35 var(--sans); }
+.watch-group + .watch-group { margin-top:1.3rem; }
+.watch-line { display:grid; grid-template-columns:6.2rem minmax(24px, 1fr) 3.1rem; align-items:center; gap:.6rem; font-size:.9rem; }
+.watch-line + .watch-line { margin-top:.3rem; }
+.watch-line strong { text-align:right; font-variant-numeric:tabular-nums; }
+.watch-track { height:10px; background:#e9ede7; border-radius:2px; overflow:hidden; }
+.watch-track i { display:block; height:100%; background:var(--sea); }
+.watch-track.personalized i { background:var(--teal); }
 
 @media (max-width: 760px) {
   .finding { grid-template-columns: 1fr; gap: 1.35rem; }
@@ -272,6 +294,9 @@ a:hover { color: var(--wine); }
   .study-stats dt { font-size: .8rem; }
   .study-stats dd { font-size: 1.65rem; }
   .figure { padding: 18px 16px; }
+  .insight-table { font-size:.93rem; }
+  .insight-table thead th { font-size:.8rem; }
+  .finding-links { gap:.4rem .85rem; }
   .chart-head { margin-bottom: 1.15rem; }
   .dot-field { gap: 6px 0; }
   .legend li { font-size: .86rem; }

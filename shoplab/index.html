@@ -37,10 +37,14 @@
         <div class="design-steps">
           <div><h3>State a preference</h3><p>Before each category, shoppers described what they wanted in their own words. They could specify a firm budget, a comfortable price range, brands and intended uses.</p></div>
           <div><h3>Shop independently</h3><p>People browsed eight items per page and could choose none. Two randomly assigned models each received the whole shuffled catalogue in one request, including individual photos, specifications, prices, stars, rating counts and badges.</p></div>
-          <div><h3>Reconsider the choice</h3><p>At the end, shoppers compared suggestions with their initial picks. The model identities were hidden, a placebo was included, and shoppers could keep their pick, switch, or choose none.</p></div>
+          <div><h3>Reconsider the choice</h3><p>At the end, shoppers saw model suggestions alongside a placebo chosen without a model. The source of each suggestion was hidden. Shoppers could keep their initial pick, switch, or choose none.</p></div>
         </div>
         <p class="explorer-link"><a href="explorer/">Open the participant explorer</a><span>With a study access key, follow a shopper from their written preferences and page visits to their choices and ratings of the AI suggestions.</span></p>
       </section>
+      <nav class="finding-links" aria-label="Jump to a finding">
+        <span>Findings</span>
+        <a href="#search">Position</a><a href="#findings">Agreement</a><a href="#variety">Product variety</a><a href="#budgets">Budgets</a><a href="#taste">Appearance</a><a href="#ratings-and-switching">Switching</a><a href="#watch-briefs">Watch follow-up</a>
+      </nav>
       <section class="finding search-finding" id="search" aria-labelledby="search-title">
         <div class="story">
           <p class="section-label">Search and position</p>
@@ -96,7 +100,43 @@
           <figcaption class="chart-foot"><span id="match-count">313 exact matches across 571 tasks with two valid picks.</span> Different shoppers also saw different prices, ratings and rankings.</figcaption>
         </figure>
       </section>
-      <section class="finding" aria-labelledby="taste-title">
+      <section class="finding" id="variety" aria-labelledby="variety-title">
+        <div class="story">
+          <p class="section-label">Variety of choices</p>
+          <h2 id="variety-title">Shoppers picked a wider range of products.</h2>
+          <p>Across 369 tasks where a shopper chose a product and GPT made a recommendation, shoppers chose <strong>211 distinct products</strong>. GPT recommended <strong>164</strong>. Claude and Gemini also recommended fewer distinct items than shoppers chose.</p>
+          <p>The pattern held within each of the six categories for every model, across all 18 category–model comparisons.</p>
+        </div>
+        <figure class="figure" aria-labelledby="variety-figure">
+          <div class="chart-head"><h3 id="variety-figure">Distinct products chosen on the same tasks</h3></div>
+          <table class="insight-table" aria-labelledby="variety-figure" aria-describedby="variety-note">
+            <thead><tr><th scope="col">Model</th><th scope="col" class="numeric">Tasks</th><th scope="col" class="numeric">Shoppers</th><th scope="col" class="numeric">Model picks</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">GPT</th><td class="numeric">369</td><td class="numeric">211</td><td class="numeric">164</td></tr>
+              <tr><th scope="row">Claude</th><td class="numeric">359</td><td class="numeric">213</td><td class="numeric">155</td></tr>
+              <tr><th scope="row">Gemini</th><td class="numeric">365</td><td class="numeric">215</td><td class="numeric">160</td></tr>
+            </tbody>
+          </table>
+          <figcaption class="chart-foot" id="variety-note">Each catalogue item counts once per column within a row, however many times it was picked. Each row compares a model with shoppers on exactly the same tasks. Rows overlap because two models could be assigned to one task.</figcaption>
+        </figure>
+      </section>
+      <section class="finding" id="budgets" aria-labelledby="budgets-title">
+        <div class="story">
+          <p class="section-label">Stated budgets</p>
+          <h2 id="budgets-title">Models stuck to the shopper’s price ceiling. Shoppers sometimes went over.</h2>
+          <p>In 455 tasks, a shopper gave a firm maximum, had at least one option within it, and chose a product. Shoppers went over their own limit <strong>64 times</strong>. Across those same tasks, <strong>all 901 model recommendations</strong> came in at or below the limit.</p>
+          <p>The same pattern appeared for comfortable price ranges. Shoppers chose inside their stated bounds in <strong>254 of 436 tasks (58.3%)</strong>. Models did so in <strong>705 of 862 recommendations (81.8%)</strong> on those tasks.</p>
+        </div>
+        <figure class="figure" aria-labelledby="budget-figure">
+          <div class="chart-head"><h3 id="budget-figure">Picks priced above the stated maximum</h3></div>
+          <dl class="budget-values">
+            <div><dt>Shoppers</dt><dd><strong>14.1%</strong><span>64 of 455 initial picks</span></dd></div>
+            <div><dt>AI models</dt><dd><strong>0%</strong><span>0 of 901 recommendations</span></dd></div>
+          </dl>
+          <figcaption class="chart-foot">Each shopper’s choice counts once per task. Both models count if both returned a pick. The outcome is a hypothetical choice at the displayed price.</figcaption>
+        </figure>
+      </section>
+      <section class="finding" id="taste" aria-labelledby="taste-title">
         <div class="story">
           <p class="section-label">Personal taste</p>
           <h2 id="taste-title">Beauty is in the eye of the shopper.</h2>
@@ -113,6 +153,50 @@
           <figcaption class="chart-foot">Each dot represents one shopping decision. A shopper could give several reasons.</figcaption>
         </figure>
       </section>
+      <section class="finding" id="ratings-and-switching" aria-labelledby="adoption-title">
+        <div class="story">
+          <p class="section-label">Ratings and switching</p>
+          <h2 id="adoption-title">“As good as mine” rarely led to a switch.</h2>
+          <p>When shoppers rated an AI suggestion better than their initial pick, they switched to that product <strong>73.8%</strong> of the time. When they rated it equally good, they switched <strong>9.0%</strong> of the time.</p>
+          <p>In 273 tasks, both models agreed on an alternative, so shoppers saw one AI pick and one placebo. <strong>44 switched to the AI pick</strong>, and 12 switched to the placebo.</p>
+        </div>
+        <figure class="figure" aria-labelledby="adoption-heading">
+          <div class="chart-head"><h3 id="adoption-heading">How often shoppers chose the AI product they rated</h3></div>
+          <table class="insight-table">
+            <caption class="sr-only">Final choice by rating of a distinct AI alternative relative to the shopper’s initial product</caption>
+            <thead><tr><th scope="col">Rating</th><th scope="col">Switched / rated</th><th scope="col">Share</th></tr></thead>
+            <tbody>
+              <tr><th scope="row">Better</th><td>76 / 103</td><td>73.8%</td></tr>
+              <tr><th scope="row">Equal</th><td>15 / 166</td><td>9.0%</td></tr>
+              <tr><th scope="row">Worse</th><td>3 / 409</td><td>0.7%</td></tr>
+              <tr><th scope="row">Unsure</th><td>1 / 50</td><td>2.0%</td></tr>
+            </tbody>
+          </table>
+          <figcaption class="chart-foot">Shoppers rated 728 AI alternatives across 518 tasks. Each differed from the shopper’s initial product. If both models suggested the same item on a task, it counted once.</figcaption>
+        </figure>
+      </section>
+      <section class="finding followup" id="watch-briefs" aria-labelledby="watch-title">
+        <div class="story">
+          <p class="section-label">Separate experiment · Fitness watches</p>
+          <h2 id="watch-title">A shopper’s brief changed which watch topped the list.</h2>
+          <p>We gave Claude Haiku 5.5 the same 77 watches in ten different orders. With a generic shopping request, it chose the <strong>Garmin Forerunner 165 in seven of ten runs</strong>. We then used each of the 98 shoppers’ watch preferences on those same ten orders. The Garmin accounted for <strong>4.8%</strong> of valid personalized picks. The Amazfit Bip 6 became the most common choice.</p>
+        </div>
+        <figure class="figure" aria-labelledby="watch-figure">
+          <div class="chart-head"><h3 id="watch-figure">Share of valid picks for each prompt’s favorite watch</h3></div>
+          <div class="watch-group">
+            <h4>Garmin Forerunner 165</h4>
+            <div class="watch-line"><span>Generic</span><i class="watch-track" aria-hidden="true"><i style="width:70%"></i></i><strong>70%</strong></div>
+            <div class="watch-line"><span>Personalized</span><i class="watch-track personalized" aria-hidden="true"><i style="width:4.82%"></i></i><strong>4.8%</strong></div>
+          </div>
+          <div class="watch-group">
+            <h4>Amazfit Bip 6</h4>
+            <div class="watch-line"><span>Generic</span><i class="watch-track" aria-hidden="true"><i style="width:0%"></i></i><strong>0%</strong></div>
+            <div class="watch-line"><span>Personalized</span><i class="watch-track personalized" aria-hidden="true"><i style="width:18.13%"></i></i><strong>18.1%</strong></div>
+          </div>
+          <figcaption class="chart-foot">Ten generic picks and 954 valid personalized picks. In 26 of the 980 personalized runs, the model returned no usable selection. With only ten generic runs, that baseline is imprecise.</figcaption>
+          <div class="chart-files"><a href="watch-prompt-picks.csv" download>Download counts for all 77 watches (CSV)</a></div>
+        </figure>
+      </section>
       <section class="method" aria-label="Study methods">
         <details>
           <summary>How the study and comparisons work</summary>
@@ -121,6 +205,9 @@
           <p><strong>What position tells us.</strong> The curves show a strong concentration of human choices near the top of the randomized catalogue. Browsing takes effort, and Sponsored badges appeared more often on the first page. The curves alone cannot isolate the effect of position. In an actual purchase with money at stake, people might search differently.</p>
           <p><strong>Model agreement.</strong> Each task assigned two of Claude Opus 5.5, GPT-6.1 Sol and Gemini 3.8 Flash. Both returned a valid product in 571 of 582 tasks. For the different-shopper benchmark, we paired one model’s pick with each of the other model’s picks for different shoppers in the same category, keeping the model pair fixed. We weighted each category and pair by its number of valid tasks. Both preferences and the displayed offers varied across shoppers, so this comparison combines those differences.</p>
           <p><strong>Personal taste.</strong> We compared the actual price, star rating and number of ratings displayed in each task. We counted each task once, even if two suggestions qualified. Of the 86 decisions to keep the original, 17 explanations favored its looks and nine more identified a visual objection to a qualifying AI suggestion. General references to appearance and comments about a different suggestion fall outside the 26. These are shoppers’ reported reasons. The experiment did not randomize product appearance.</p>
+          <p><strong>Price bounds.</strong> We compared each pick’s displayed price with the shopper’s own stated budget. For the separate comfortable-range measure, a pick passes if it meets every bound the shopper supplied, including one-sided ranges. Each analysis uses only tasks with the relevant bound and at least one valid model pick.</p>
+          <p><strong>Ratings and switching.</strong> Each observation pairs a suggestion’s rating with whether the shopper chose that exact item in the final decision. We excluded suggestions that already matched the initial pick, placebo cards and tasks without an initial product. A participant could rate several alternatives, then make one final decision. The ratings and final choice were collected in the same comparison.</p>
+          <p><strong>Watch follow-up.</strong> We ran this model experiment after the lab study. The 77-product catalogue used fixed original prices, stars and rating counts. Both prompt conditions used the same text and specifications, with images, written review excerpts and badges omitted. We ran one generic request per product order and one request per shopper’s watch brief per order. The chart describes this model and catalogue.</p>
         </details>
       </section>
     </main>
